@@ -1,7 +1,7 @@
 {
-  "name": "dt-trace-front",
-  "version": "1.0.0",
-  "description": "dt-trace",
+  "name": "{{name}}",
+  "version": "{{version}}",
+  "description": "{{description}}",
   "repository": "ssh://git@git.dtstack.cn:10022/dtstack/dt-trace-front.git",
   "author": "长卿 <changqing@dtstack.com>",
   "license": "MIT",
