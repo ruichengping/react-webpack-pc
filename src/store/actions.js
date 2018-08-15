@@ -1,4 +1,4 @@
-import * as actionTypes from '../actionType/user';
+import * as actionTypes from './actionTypes';
 
 export const changeLanguage=(params)=> (dispatch,getState)=>{
   dispatch({

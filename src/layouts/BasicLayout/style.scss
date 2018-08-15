@@ -1,0 +1,47 @@
+.g-container{
+  height: 100%;
+  .g-header{
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    padding: 0;
+    .m-left{
+      flex:0 0 200px;
+      text-align: center;
+      .u-title{
+        color: #fff;
+        font-size: 18px;
+      }
+    }
+    .m-middle{
+      flex: 1;
+    }
+    .m-right{
+      flex: 0 0 120px;
+      .u-user-name{
+        color: #fff;
+        font-size: 16px;
+        padding-right: 20px;
+      }
+    }
+  }
+  .g-body{
+    box-sizing: border-box;
+    padding-top: 64px;
+    height: 100%;
+    overflow: auto;
+  }
+}
+.m-user-operation-list{
+  .operation-item{
+    padding: 10px;
+    a:link{
+      color: #000;
+    }
+    a:hover{
+      color: #409eff;
+    }
+  }
+}

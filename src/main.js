@@ -1,14 +1,12 @@
 import React from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
-import {createStore,combineReducers,applyMiddleware} from 'redux';
-import thunk from 'redux-thunk';
-import rootReducer from './redux/reducer';
-import App from './App';
-const store=createStore(
-  combineReducers(rootReducer),
-  applyMiddleware(thunk)
-)
+import store from '@/store';
+import App from '@/App';
+import '@/scss/reset.scss';
+import '@/scss/base.scss';
+
+
 render(
   <Provider store={store}>
     <App/>

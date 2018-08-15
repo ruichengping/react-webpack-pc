@@ -1,0 +1,16 @@
+html,body{
+  height: 100%;
+}
+body,ul{
+  margin: 0;
+}
+ul{
+  padding: 0;
+}
+li{
+  list-style: none;
+}
+#app{
+  height: 100%;
+  min-width: 1340px;
+}

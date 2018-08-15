@@ -11,6 +11,7 @@
   ],
   "plugins": [
     "transform-runtime",
+    "transform-object-assign",
     "transform-decorators-legacy",
     "transform-decorators",
     "transform-async-to-generator",

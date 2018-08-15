@@ -1,0 +1,17 @@
+
+.g-navone{
+  display: flex;
+  height: 100%;
+  .g-slider{
+    width: 200px;
+    height: 100%;
+    .m-menu{
+      height: 100%;
+    }
+  }
+  .g-main{
+    flex: 1;
+    height: 100%;
+    overflow: auto;
+  }
+}
