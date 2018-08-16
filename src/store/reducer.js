@@ -1,14 +1,13 @@
 import * as actionTypes from './actionTypes';
 const initialState={
-  userName:'芮程平',
-  language:'zh'
+  username:''
 }
 
 export default (state=initialState,actions)=>{
   const {type,payload}=actions;
   switch(type){
-    case actionTypes.CHANGE_LANGUAGE:
-      return Object.assign({},initialState,{language:payload});
+    case actionTypes.CHANGE_USER_NAME:
+      return Object.assign({},initialState,{username:payload});
       break;
     default:
       return state;

@@ -1,13 +1,16 @@
 import React from 'react';
 import {Layout,Menu,Popover,Avatar,Icon} from 'antd';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types'
 import {withRouter} from 'react-router';
+import * as globalActions from '../../store/actions';
 const { Header, Content} = Layout;
 import './style.scss';
 @connect(
-  state=>({user:state.user})
+  state=>({user:state.user}),
+  dispatch=>bindActionCreators(globalActions,dispatch)
 )
 class BasicLayout extends React.PureComponent{
   static propTypes = {
@@ -17,6 +20,8 @@ class BasicLayout extends React.PureComponent{
   constructor(props){
     super(props);
     const {match} = props;
+    const {fecthUserName} = props;
+    fecthUserName();
     this.state={
       menuSelectedKeys:[match.path.match(/^\/[a-zA-Z]+/)[0]]
     }
@@ -29,7 +34,7 @@ class BasicLayout extends React.PureComponent{
   render(){
     const {menuSelectedKeys} = this.state;
     const {user,children,className} = this.props;
-    const {userName} = user;
+    const {username} = user;
     const content=(
       <ul className="m-user-operation-list">
         <li className="operation-item" key="1"><Link to="/user/center">用户信息</Link></li>
@@ -55,7 +60,7 @@ class BasicLayout extends React.PureComponent{
             <div className="m-right text-right">
               <Popover placement="bottom" content={content}>
                 <Avatar icon="user" />
-                <span className="u-user-name ml-10">{userName}</span>
+                <span className="u-user-name ml-10">{username}</span>
               </Popover>
             </div>
         </Header>

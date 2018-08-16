@@ -3,7 +3,7 @@ import BasicLayout from '../BasicLayout';
 import {Menu,Icon} from 'antd'
 import './style.scss';
 const SubMenu = Menu.SubMenu;
-class NavOneLayout extends React.PureComponent{
+class NavTwoLayout extends React.PureComponent{
   render(){
     const {children} = this.props;
     return (
@@ -21,11 +21,9 @@ class NavOneLayout extends React.PureComponent{
             <Menu.Item key="/navone/four"><Icon type="inbox" /> 菜单三</Menu.Item>
           </Menu>
         </div>
-        <div className="g-main">
-          {children}
-        </div>
+        <div className="g-main">{children}</div>
       </BasicLayout>
     )
   }
 }
-export default NavOneLayout;
+export default NavTwoLayout;
