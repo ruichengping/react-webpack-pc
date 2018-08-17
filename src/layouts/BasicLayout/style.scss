@@ -17,6 +17,9 @@
     }
     .m-middle{
       flex: 1;
+      .m-slider{
+        line-height: 64px;
+      }
     }
     .m-right{
       .u-user-name{

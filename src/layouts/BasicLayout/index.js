@@ -47,10 +47,10 @@ class BasicLayout extends React.PureComponent{
             <div className="m-left"><span className="u-title">样本系统</span></div>
             <div className="m-middle">
               <Menu
+                className="m-slider"
                 theme="dark"
                 mode="horizontal"
                 selectedKeys={menuSelectedKeys}
-                style={{ lineHeight: '64px' }}
                 onClick={this.handleMenuClick}
               >
                 <Menu.Item key="/navone"><Icon type="mail" /> 导航1</Menu.Item>
