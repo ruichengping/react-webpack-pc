@@ -1,4 +1,4 @@
-# react-webpack
+# react-webpack-pc
 这是一款基于webpack构建的react项目模板,可以使用我自己写的脚手架工具[asuna-cli](https://github.com/ruichengping/asuna-cli)进行构建，所以不能直接git clone下来直接运行，需要做一下修改。
 
 ![package.json](https://user-gold-cdn.xitu.io/2018/8/17/16546fe2082983a3?w=1834&h=594&f=jpeg&s=158191)
