@@ -3,7 +3,7 @@ import './style.scss';
 class HelloWorld extends React.PureComponent{
   render(){
     return (
-      <h4 className="u-text" style=\{{lineHeight:28}}>Hello World</h4>
+      <h4 className="u-text">Hello World</h4>
     )
   }
 }
