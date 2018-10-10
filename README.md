@@ -41,12 +41,57 @@ package.json我配置一个script，如下：
 
 ## src
 ### api 
-这里我们用来放置api的接口地址，为了后续的接口维护，我们在使用的过程中不会直接写死接口地址，而是使用常量名来使用接口地址，接口地址变更只需要更改常量对应的值接口。另外我们很清楚知道我们项目中有哪些接口，每个接口都是干嘛的。
 ```
-export default {
-  USER_INFO:'/api/user',
-  AUTHOR_INFO:'/api/author'
+import _ from 'lodash'
+import http from '../utils/http'
+
+const API_URL={
+  fetchUserInfo:{
+    method:'GET',
+    url:'/api/user'
+  },
+  fetchAuthorInfo:{
+    method:'GET',
+    url:'/api/author'
+  }
 }
+
+const API = {}
+_.keys(API_URL).forEach(key=>{
+  const item = API_URL[key]
+  switch(item.method){
+    case 'GET':
+      API[key]=function(params){
+        return http.get(item.url,params)
+      }
+      break;
+    case 'POST':
+      API[key]=function(params){
+        return http.post(item.url,params)
+      }
+      break;
+    case 'DELETE':
+      API[key]=function(params){
+        return http.delete(item.url,params)
+      }
+      break;
+    default:
+      API[key]=function(params){
+        return http.get(item.url,params)
+      }
+  } 
+})
+
+export default API
+```
+这里我们用来放置api的接口地址，为了后续的接口维护，我们在使用的过程中不会直接写死接口地址，而是将接口请求封装成一个个方法。通过对接口的统一维护，我们就可以做到在执行修改接口地址、修改请求方法、新增接口等等操作时，就不用在整个项目里到处找了，只要维护好API_URL这个对象即可。使用方法如下：
+```
+import API from '@/api'
+//params为请求参数
+API.fetchUserInfo(params).then(response=>{
+    //response为返回值
+    ...
+})
 ```
 ### assets
 这里我们会放项目的所需要图片资源，这些图片资源一般来说都是做图标的，都比较小。webpack会将其转化成**BASE64**去使用。如果你不想以这种方式使用，可以在static目录下存放图片资源。
@@ -150,6 +195,7 @@ export default BasicLayout;
 ```
 import {createStore,combineReducers,applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
+import API from '@/api';
 import user from './reducer';
 import author from '@/pages/PageOne/redux/reducer'
 const store=createStore(
@@ -157,9 +203,44 @@ const store=createStore(
     user,
     author
   }),
-  applyMiddleware(thunk)
+  applyMiddleware(thunk.withExtraArgument({
+    API
+  }))
 )
 export default store;
+```
+这里有一个小细节，redux-thunk是可以携带一些额外的对象或者方法的，这里，我携带API对象。当我们需要在actions.js里面使用API对象时，就不需要再import导入进来。下面我们做个对比：
+
+**修改前**
+```
+import * as actionTypes from './actionTypes';
+import API from '../api';
+
+export const fecthUserName=(params)=> async (dispatch,getState)=>{
+  const response =await API.fetchUserInfo(params);
+  const {success,data} = response;
+  if(success){
+    dispatch({
+      type:actionTypes.CHANGE_USER_NAME,
+      payload:data
+    });
+  }
+}
+```
+**修改后**
+```
+import * as actionTypes from './actionTypes';
+
+export const fecthUserName=(params)=> async (dispatch,getState,{API})=>{
+  const response =await API.fetchUserInfo(params);
+  const {success,data} = response;
+  if(success){
+    dispatch({
+      type:actionTypes.CHANGE_USER_NAME,
+      payload:data
+    });
+  }
+}
 ```
 ### utils
 这里会存放一些自己的封装的js工具文件，比如我在项目基于axios封装了一个http.js,简化了axios的操作。
