@@ -27,6 +27,9 @@ module.exports = {
     },
     extensions: ['.js', '.jsx', '.json']
   },
+  externals: {
+    'lodash':'_'
+  },
   module: {
     rules: [
       {

@@ -1,9 +1,7 @@
 import * as actionTypes from './actionTypes';
-import API from '../api';
-import http from '../utils/http';
 
-export const fecthUserName=(params)=> async (dispatch,getState)=>{
-  const response =await http.get(API.USER_INFO,params);
+export const fecthUserName=(params)=> async (dispatch,getState,{API})=>{
+  const response =await API.fetchUserInfo(params);
   const {success,data} = response;
   if(success){
     dispatch({

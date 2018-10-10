@@ -1,9 +1,7 @@
 import * as actionTypes from './actionTypes';
-import http from '../../../utils/http';
-import API from '../../../api';
 
-export const fetchAuthorData=(params)=>async (dispatch,getState)=>{
-  const response= await http.get(API.AUTHOR_INFO,params);
+export const fetchAuthorData=(params)=>async (dispatch,getState,{API})=>{
+  const response= await API.fetchAuthorInfo(params);
   const {success,data} = response;
   if(success){
     dispatch({
