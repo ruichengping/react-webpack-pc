@@ -9,6 +9,10 @@ const API_URL={
   fetchAuthorInfo:{
     method:'GET',
     url:'/api/author'
+  },
+  fetchUserList:{
+    method:'GET',
+    url:'/api/userList'
   }
 }
 

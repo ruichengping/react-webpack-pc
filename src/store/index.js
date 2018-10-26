@@ -4,11 +4,13 @@ import API from '@/api';
 import user from './reducer';
 import author from '@/pages/PageOne/redux/reducer';
 
+const rootReducer = combineReducers({
+  user,
+  author
+})
+
 const store=createStore(
-  combineReducers({
-    user,
-    author
-  }),
+  rootReducer,
   applyMiddleware(thunk.withExtraArgument({
     API
   }))

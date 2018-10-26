@@ -2,7 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from './redux/actions'; 
-import * as globalActions from '../../store/actions';
 import './style.scss';
 import BasicLayout from '@/layouts/BasicLayout'
 import {Icon} from 'antd';

@@ -4,7 +4,7 @@ import { Switch, Route ,Redirect} from 'react-router';
 import PageOne from '@/pages/PageOne';
 import PageTwo from '@/pages/PageTwo';
 import NavTwoLayout from '@/layouts/NavTwoLayout';
-import NotFound from '@/pages/404';
+import NotFound from '@/pages/Exception/404';
 const Router = BrowserRouter;
 
 class App extends React.PureComponent{
