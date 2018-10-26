@@ -1,11 +1,8 @@
 # react-webpack-pc
-这是一款基于webpack构建的react项目模板,可以使用我自己写的脚手架工具[asuna-cli](https://github.com/ruichengping/asuna-cli)进行构建，所以不能直接git clone下来直接运行，需要做一下修改。
-
-![package.json](https://user-gold-cdn.xitu.io/2018/8/17/16546fe2082983a3?w=1834&h=594&f=jpeg&s=158191)
-
-package.json中上图红色边框里的部分需要修改一下，不然运行会报 <Invalid name: "{{name}}>"的错误。
+这是一款基于webpack构建的react项目模板,可以使用我自己写的脚手架工具[asuna-cli](https://github.com/ruichengping/asuna-cli)进行构建。
 
 ## 项目结构
+
 ![项目结构](https://user-gold-cdn.xitu.io/2018/8/17/16546fd9debd8473?w=546&h=654&f=jpeg&s=44641)
 
 > 以上是示例项目的目录结构，下面我们将逐一进行分析**
@@ -198,11 +195,12 @@ import thunk from 'redux-thunk';
 import API from '@/api';
 import user from './reducer';
 import author from '@/pages/PageOne/redux/reducer'
-const store=createStore(
-  combineReducers({
+const rootReducer = combineReducers({
     user,
     author
-  }),
+  });
+const store=createStore(
+  rootReducer,
   applyMiddleware(thunk.withExtraArgument({
     API
   }))
@@ -308,6 +306,10 @@ render(
 - 一些比较大的第三方工具库会影响我们的打包速度，可以把它拿出来通过script的方式引入
 
 其实第三方工具库最好的方式是CDN，但是有些公司就是没有，无奈只能如此。你加入的第三工具库都可在当前服务器下”**/static/***“路径下获取到。
+## templates
+
+这里存放着页面和组件级别构建所需要的模板文件，页面级别构建提供了两种模板PageReducer（集成了reducer）和PageSample（不集成reducer），而组件只提供了一种模板ComSample。页面和组件级别的构建是需要配合asuna-cli才能构建，目前项目已经集成了asuna-cli。package.json写了两个script：npm run newPage（页面构建）和npm run newComponent（组件构建）。开发可根据实际需要选择构建，asuna-cli具体使用可以去**https://github.com/ruichengping/asuna-cli**查看。
+
 ## 其他文件 
 - .babelrc ---- babel转换的配置文件
 - .gitignore ---- git操作所需要忽略的文件
@@ -315,7 +317,8 @@ render(
 - index.html ---- 模板index.html,webpack会根据此生成新的index.html,配合**html-webpack-plugin**使用
 - package.json ---- 家喻户晓的东西
 - README.md ---- 项目说明
-- theme.js ----  ant-design的主题色配置文件，具体使用可以参考ant-design。
+- theme.js ----  ant-design的主题色配置文件，具体使用可以参考ant-design
+- asuna.config.js ---- asuna-cli的配置文件
 - yarn.lock ---- 锁定包的版本
 ## 结语
 这个只是个人搭建企业级React项目的一些总结。当然存在不足的地方，后面在工作过程中如果有一些好的想法也会在这上面进行更新。欢迎大家Star关注！如果你也有好的想法欢迎留言交流，希望这篇拙文能给大家一些启发。
