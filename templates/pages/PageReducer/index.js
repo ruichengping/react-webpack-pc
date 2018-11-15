@@ -33,7 +33,7 @@ export default class {{name}} extends React.PureComponent {
     pageSize:20
   }
   componentDidMount() {
-    this.initData(true);
+    this.loadMainData(true);
   }
   //删除
   handleDelete=(row)=>{
@@ -58,7 +58,7 @@ export default class {{name}} extends React.PureComponent {
   }
 
   //拉取数据
-  initData(isClear){
+  loadMainData(isClear){
     const {pageNo,pageSize} = this.state;
     if(isClear){
       this.setState({

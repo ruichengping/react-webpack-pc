@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import {Table,Modal,message as Message} from "antd";
-import API from '@/api';
+import {API} from '@/api';
 import Filter from './components/Filter';
 import "./style.scss";
 
@@ -30,7 +30,7 @@ export default class {{name}} extends React.PureComponent {
     userList:[]
   }
   componentDidMount() {
-    this.initData(true);
+    this.loadMainData(true);
   }
   //删除
   handleDelete=(row)=>{
@@ -57,7 +57,7 @@ export default class {{name}} extends React.PureComponent {
   }
 
   //拉取数据
-  initData(isClear){
+  loadMainData(isClear){
     const {pageNo,pageSize} = this.state;
     if(isClear){
       this.setState({

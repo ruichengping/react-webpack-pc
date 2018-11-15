@@ -1,47 +1,27 @@
 import _ from 'lodash'
-import http from '../utils/http'
+import http from '@/utils/http'
+import API_URL from './url';
 
-const API_URL={
-  fetchUserInfo:{
-    method:'GET',
-    url:'/api/user'
-  },
-  fetchAuthorInfo:{
-    method:'GET',
-    url:'/api/author'
-  },
-  fetchUserList:{
-    method:'GET',
-    url:'/api/userList'
-  }
+function mapUrlObjToFuncObj(urlObj){
+  const API = {};
+  _.keys(urlObj).forEach((key)=>{
+    const item = urlObj[key]
+    API[key]=function(params){
+      return http[item.method](item.url,params)
+    }
+  });
+  return API;
 }
 
+function mapUrlObjToStrObj(urlObj){
+  const Url = {};
+  _.keys(urlObj).forEach((key)=>{
+    const item = urlObj[key]
+    Url[key]=item.url
+  });
+  return Url;
+}
 
-const API = {}
-_.keys(API_URL).forEach(key=>{
-  const item = API_URL[key]
-  switch(item.method){
-    case 'GET':
-      API[key]=function(params){
-        return http.get(item.url,params)
-      }
-      break;
-    case 'POST':
-      API[key]=function(params){
-        return http.post(item.url,params)
-      }
-      break;
-    case 'DELETE':
-      API[key]=function(params){
-        return http.delete(item.url,params)
-      }
-      break;
-    default:
-      API[key]=function(params){
-        return http.get(item.url,params)
-      }
-  } 
-})
-
-
-export default API
+export const API = mapUrlObjToFuncObj(API_URL);
+export const URL = mapUrlObjToStrObj(API_URL);
+   
