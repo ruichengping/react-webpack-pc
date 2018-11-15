@@ -38,52 +38,56 @@ package.json我配置一个script，如下：
 
 ## src
 ### api 
+**url.js**
 ```
-import _ from 'lodash'
-import http from '../utils/http'
-
-const API_URL={
+export default {
   fetchUserInfo:{
-    method:'GET',
+    method:'get',
     url:'/api/user'
   },
   fetchAuthorInfo:{
-    method:'GET',
+    method:'get',
     url:'/api/author'
+  },
+  fetchUserList:{
+    method:'get',
+    url:'/api/userList'
   }
 }
-
-const API = {}
-_.keys(API_URL).forEach(key=>{
-  const item = API_URL[key]
-  switch(item.method){
-    case 'GET':
-      API[key]=function(params){
-        return http.get(item.url,params)
-      }
-      break;
-    case 'POST':
-      API[key]=function(params){
-        return http.post(item.url,params)
-      }
-      break;
-    case 'DELETE':
-      API[key]=function(params){
-        return http.delete(item.url,params)
-      }
-      break;
-    default:
-      API[key]=function(params){
-        return http.get(item.url,params)
-      }
-  } 
-})
-
-export default API
 ```
-这里我们用来放置api的接口地址，为了后续的接口维护，我们在使用的过程中不会直接写死接口地址，而是将接口请求封装成一个个方法。通过对接口的统一维护，我们就可以做到在执行修改接口地址、修改请求方法、新增接口等等操作时，就不用在整个项目里到处找了，只要维护好API_URL这个对象即可。使用方法如下：
+**index.js**
 ```
-import API from '@/api'
+import _ from 'lodash'
+import http from '@/utils/http'
+import API_URL from './url';
+
+function mapUrlObjToFuncObj(urlObj){
+  const API = {};
+  _.keys(urlObj).forEach((key)=>{
+    const item = urlObj[key]
+    API[key]=function(params){
+      return http[item.method](item.url,params)
+    }
+  });
+  return API;
+}
+
+function mapUrlObjToStrObj(urlObj){
+  const Url = {};
+  _.keys(urlObj).forEach((key)=>{
+    const item = urlObj[key]
+    Url[key]=item.url
+  });
+  return Url;
+}
+
+export const API = mapUrlObjToFuncObj(API_URL);
+export const URL = mapUrlObjToStrObj(API_URL);
+   
+```
+这里我们用来放置api的接口地址，为了后续的接口维护，我们在使用的过程中不会直接写死接口地址，而是将接口请求封装成一个个方法。通过对接口的统一维护，我们就可以做到在执行修改接口地址、修改请求方法、新增接口等等操作时，就不用在整个项目里到处找了，只要维护好url.js向外暴露的对象即可。使用方法如下：
+```
+import {API} from '@/api'
 //params为请求参数
 API.fetchUserInfo(params).then(response=>{
     //response为返回值
