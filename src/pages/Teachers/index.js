@@ -23,7 +23,7 @@ const sexMapper = (sex)=>{
 @connect(
   state => ({ user:state.user }),
 )
-export default class PageTwo extends React.PureComponent {
+export default class Teachers extends React.PureComponent {
   state={
     pageNo:1,
     pageSize:20,
