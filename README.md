@@ -1,6 +1,9 @@
 # react-webpack-pc
 这是一款基于webpack构建的react项目模板,可以使用我自己写的脚手架工具[asuna-cli](https://github.com/ruichengping/asuna-cli)进行构建。
 
+## 前言
+该项目已分不同方向去维护，每个分支与之对应的方向可在[CONTRIBUTING.md](/ruichengping/react-webpack-pc/blob/master/README.md)里查看
+
 ## 项目结构
 
 ![项目结构](https://user-gold-cdn.xitu.io/2018/8/17/16546fd9debd8473?w=546&h=654&f=jpeg&s=44641)
@@ -246,36 +249,97 @@ export const fecthUserName=(params)=> async (dispatch,getState,{API})=>{
 ```
 ### utils
 这里会存放一些自己的封装的js工具文件，比如我在项目基于axios封装了一个http.js,简化了axios的操作。
-### App.jsx
-这里主要用来定义一下路由，先放代码：
+
+### router/index.js
+这里以配置化的防止去注册路由，并app.js里面去渲染路由标签。
+```
+import Loadable from 'react-loadable';
+import createHistory from 'history/createBrowserHistory';
+import BasicLayout from '@/layouts/BasicLayout';
+import NavTwoLayout from '@/layouts/NavTwoLayout';
+import Loading from '@/components/Loading';
+import NotFound from '@/pages/Exception/404';
+
+
+const Home = Loadable({loader: () => import('@/pages/Home'),loading: Loading});
+const Teachers = Loadable({loader: () => import('@/pages/Teachers'),loading: Loading});
+
+export const history = createHistory();
+
+export const routes = [
+  {
+    path:'/',
+    redirect:'/navone/home'
+  },
+  {
+    path:'/navone',
+    redirect:'/navone/home',
+    children:[{
+      path:'/home',
+      layout:BasicLayout,
+      component:Home
+    }]
+  },
+  {
+    path:'/navtwo',
+    redirect:'/navtwo/teachers',
+    children:[{
+      path:'/teachers',
+      layout:NavTwoLayout,
+      component:Teachers
+    }]
+  },
+  {
+    path:'*',
+    component:NotFound
+  }
+]
+```
+### App.js
+这里根据路由配置用来渲染路由标签，先放代码：
 ```
 import React from 'react';
-import {BrowserRouter}from 'react-router-dom';
-import { Switch, Route ,Redirect} from 'react-router';
-import PageOne from '@/pages/PageOne';
-import PageTwo from '@/pages/PageTwo';
-import NavTwoLayout from '@/layouts/NavTwoLayout';
-import NotFound from '@/pages/404';
-const Router = BrowserRouter;
+import {Router} from 'react-router-dom';
+import {Switch, Route ,Redirect} from 'react-router';
+import {history,routes} from '@/router';
 
+
+
+function getRouterByRoutes(routes){
+  const renderedRoutesList = [];
+  const renderRoutes = (routes,parentPath)=>{
+    Array.isArray(routes)&&routes.forEach((route)=>{
+      const {path,redirect,children,layout,component} = route;
+      if(redirect){
+        renderedRoutesList.push(<Redirect key={`${parentPath}${path}`} exact from={path} to={`${parentPath}${redirect}`}/>)
+      }
+      if(component){
+        renderedRoutesList.push(
+          layout?<Route 
+            key={`${parentPath}${path}`} 
+            exact path={`${parentPath}${path}`}
+            render={(props)=>React.createElement(layout,props,React.createElement(component,props))} />:
+          <Route 
+              key={`${parentPath}${path}`} 
+              exact 
+              path={`${parentPath}${path}`} 
+              component={component}/>)
+      }
+      if(Array.isArray(children)&&children.length>0){
+        renderRoutes(children,path)
+      }
+    });
+  }  
+  renderRoutes(routes,'')
+  return renderedRoutesList;
+ 
+}
 class App extends React.PureComponent{
   render(){
     return (
-      <Router>
+      <Router history={history}>
         <Switch>
-          <Redirect exact from="/" to="/navone"/>
-          {/* 导航栏1 */}
-          <Redirect exact from="/navone" to="/navone/pageone"/>
-          <Route exact path="/navone/pageone" component={PageOne}/>
-          {/* 导航栏2 */}
-          <Route path="/navtwo" render={({match})=><NavTwoLayout>
-              <Switch>
-                <Redirect exact from={`${match.path}`} to={`${match.path}/pagetwo`}/>
-                <Route exact path={`${match.path}/pagetwo`} component={PageTwo}/>
-              </Switch>
-          </NavTwoLayout>}/>
-          {/* 404 */}
-          <Route component={NotFound}/>
+          {getRouterByRoutes(routes)}
         </Switch>
       </Router>
     )
@@ -283,7 +347,7 @@ class App extends React.PureComponent{
 }
 export default App;
 ```
-这里我们需要重点讲的是之间在layouts中我们跳过的内容，能不能不每次都用layout组件去包裹代码，答案是可以的。这里我选择<Route>中的render属性，另外我用的是react-router的4.x版本，已经移除嵌套路由了，这边如何做嵌套路由可以参考我的代码，很简单就不细说了，不过match.path千万别漏了哦！
+这里我们需要重点讲的是之间在layouts中我们跳过的内容，能不能不每次都用layout组件去包裹代码，答案是可以的。这里我选择<Route>中的render属性。
 ### main.js
 webpack入口文件，主要一些全局js或者scss的导入，并执行react-dom下的render方法，代码如下：
 ```
