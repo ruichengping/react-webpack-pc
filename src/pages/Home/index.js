@@ -9,7 +9,7 @@ import {Icon} from 'antd';
   state=>({user:state.user,author:state.author}),
   dispatch=>bindActionCreators(actions,dispatch)
 )
-class PageOne extends React.PureComponent{
+class Home extends React.PureComponent{
   constructor(props){
     super(props);
     const {fetchAuthorData} = props;
@@ -39,4 +39,4 @@ class PageOne extends React.PureComponent{
    
   }
 }
-export default PageOne;
+export default Home;
