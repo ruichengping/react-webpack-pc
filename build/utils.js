@@ -1,9 +1,11 @@
 'use strict'
 const path = require('path')
 const config = require('../config')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const packageConfig = require('../package.json')
 const theme=require('../theme')
+
+const devMode = process.env.NODE_ENV !== 'production'
 
 exports.assetsPath = function (_path) {
   const assetsSubDirectory = process.env.NODE_ENV === 'production'
@@ -31,11 +33,11 @@ exports.cssLoaders = function (options) {
   }
 
   const styleLoader={
-    loader:'style-loader'
+    loader:devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
   }
   // generate loader string to be used with extract text plugin
   function generateLoaders (loader, loaderOptions) {
-    const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
+    const loaders = options.usePostCSS ? [styleLoader,cssLoader, postcssLoader] : [styleLoader,cssLoader]
 
     if (loader) {
       loaders.push({
@@ -46,17 +48,7 @@ exports.cssLoaders = function (options) {
       })
     }
 
-    // Extract CSS when that option is specified
-    // (which is the case during production build)
-    if (options.extract) {
-      return ExtractTextPlugin.extract({
-        fallback:styleLoader,
-        use: loaders
-      })
-    } else {
-      loaders.unshift(styleLoader)
-      return loaders
-    }
+    return loaders;
   }
 
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
