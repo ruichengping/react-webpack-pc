@@ -2,7 +2,7 @@
 这是一款基于webpack构建的react项目模板,可以使用我自己写的脚手架工具[asuna-cli](https://github.com/ruichengping/asuna-cli)进行构建。
 
 ## 前言
-该项目已分不同方向去维护，每个分支与之对应的方向可在[CONTRIBUTING.md](/ruichengping/react-webpack-pc/blob/master/README.md)里查看
+该项目已分不同方向去维护，每个分支与之对应的方向可在[CONTRIBUTING.md](https://github.com/ruichengping/react-webpack-pc/blob/master/CONTRIBUTING.md)里查看
 
 ## 项目结构
 
@@ -349,7 +349,7 @@ export default App;
 ```
 这里我们需要重点讲的是之间在layouts中我们跳过的内容，能不能不每次都用layout组件去包裹代码，答案是可以的。这里我选择<Route>中的render属性。
 ### main.js
-webpack入口文件，主要一些全局js或者scss的导入，并执行react-dom下的render方法，代码如下：
+webpack入口文件，主要一些全局js或者scss的导入，并执行react-dom下的render方法，代码如下：
 ```
 import React from 'react';
 import {render} from 'react-dom';
