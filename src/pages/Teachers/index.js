@@ -82,7 +82,7 @@ export default class Teachers extends React.PureComponent {
     });
   }
   render() {
-    const {pageNo,pageSize,ifError,userList} = this.state;
+    const {pageNo,pageSize,userList} = this.state;
     const { user } = this.props;
     const {username} = user;
     const columns = [
