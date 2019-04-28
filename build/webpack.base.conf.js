@@ -25,7 +25,7 @@ module.exports = {
     alias:{
       '@':path.join(__dirname,'../src')
     },
-    extensions: ['.js', '.jsx', '.json']
+    extensions: ['.ts','.tsx','.js', '.jsx', '.json']
   },
   externals: {
     'lodash':'_'
