@@ -82,7 +82,9 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "redux": "^4.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "ts-loader": "^5.4.4",
+    "typescript": "^3.4.5"
   },
   "engines": {
     "node": ">= 6.0.0",

@@ -12,7 +12,7 @@ function resolve (dir) {
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './src/main.js'
+    app: './src/main.tsx'
   },
   output: {
     path: config.build.assetsRoot,
@@ -33,9 +33,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        loader: 'babel-loader',
-        exclude:/node_modules/
+        test: /\.tsx?$/,
+        loader: 'ts-loader'
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
