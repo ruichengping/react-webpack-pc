@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes';
+import { Dispatch } from 'redux';
 
-export const fecthUserName=(params)=> async (dispatch,getState,{API})=>{
+export const fecthUserName=(params?:any)=> async (dispatch:Dispatch,getState:Function,{API}:any)=>{
   const response =await API.fetchUserInfo(params);
   const {success,data} = response;
   if(success){

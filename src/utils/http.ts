@@ -26,15 +26,15 @@ instance.interceptors.response.use(function (response) {
   return Promise.reject(error);
 });
 export default {
-  get:(url,params,option)=>{
+  get:(url:string,params:any,option:any)=>{
     return instance.get(url,Object.assign({
       params
     },option));
   },
-  post:(url,params,option)=>{
+  post:(url:string,params:any,option:any)=>{
     return instance.post(url,params,option); 
   },
-  delete:(url,params,option)=>{
+  delete:(url:string,params:any,option:any)=>{
     return instance.delete(url,Object.assign({
       params
     },option));

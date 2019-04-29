@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import {Form, Input, Select, Button} from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+interface FilterProps{
+  onSearch:Function,
+  form:any
+}
 
-class Filter extends React.PureComponent{
+class Filter extends React.PureComponent<FilterProps>{
   //搜索
-  handleSubmit=(e)=>{
+  handleSubmit=(e:FormEvent)=>{
     e.preventDefault();
     const {onSearch,form} = this.props;
     onSearch(form.getFieldsValue());

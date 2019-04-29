@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { ReactElement, ComponentClass} from 'react';
 import {Router} from 'react-router-dom';
 import {Switch, Route ,Redirect} from 'react-router';
 import {history,routes} from '@/router';
 
+type RouteItem = {
+  path:string,
+  redirect:string,
+  children:RouteItem[],
+  layout:ComponentClass,
+  component:ComponentClass
+}
 
-
-function getRouterByRoutes(routes){
-  const renderedRoutesList = [];
-  const renderRoutes = (routes,parentPath)=>{
+function getRouterByRoutes(routes:RouteItem[]){
+  const renderedRoutesList:ReactElement[] = [];
+  const renderRoutes = (routes:RouteItem[],parentPath:string)=>{
     Array.isArray(routes)&&routes.forEach((route)=>{
       const {path,redirect,children,layout,component} = route;
       if(redirect){
@@ -18,7 +24,7 @@ function getRouterByRoutes(routes){
           layout?<Route 
             key={`${parentPath}${path}`} 
             exact path={`${parentPath}${path}`}
-            render={(props)=>React.createElement(layout,props,React.createElement(component,props))} />:
+            render={(props:any)=>React.createElement(layout,props,React.createElement(component,props))} />:
           <Route 
               key={`${parentPath}${path}`} 
               exact 

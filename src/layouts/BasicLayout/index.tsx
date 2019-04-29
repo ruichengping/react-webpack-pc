@@ -8,16 +8,20 @@ import {withRouter} from 'react-router';
 import * as globalActions from '../../store/actions';
 const { Header, Content} = Layout;
 import './style.scss';
+interface BasicLayoutProps {
+  match?:any
+}
+
 @connect(
-  state=>({user:state.user}),
+  (state:any)=>({user:state.user}),
   dispatch=>bindActionCreators(globalActions,dispatch)
 )
-class BasicLayout extends React.PureComponent{
+class BasicLayout extends React.PureComponent<BasicLayoutProps>{
   static propTypes = {
     history: PropTypes.object.isRequired,
     match:PropTypes.object.isRequired
   }
-  constructor(props){
+  constructor(props:any){
     super(props);
     const {match} = props;
     const {fecthUserName} = props;

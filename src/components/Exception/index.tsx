@@ -1,20 +1,25 @@
-import React, { createElement } from 'react';
+import React, { createElement, ReactElement } from 'react';
 import classNames from 'classnames';
 import { Button } from 'antd';
 import config from './typeConfig';
 import './style.scss';
 
-class Exception extends React.PureComponent {
+interface ExceptionProps{
+  className:string,
+  backText:string,
+  linkElement:string,
+  type:string,
+  title:string,
+  desc:string,
+  img:string,
+  actions:ReactElement,
+  redirect:string
+}
+class Exception extends React.PureComponent<ExceptionProps> {
   static defaultProps = {
     backText: '返回首页',
     redirect: '/',
   };
-
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
   render() {
     const {
       className,

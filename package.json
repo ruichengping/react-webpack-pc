@@ -71,7 +71,17 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
-    "antd": "^3.6.4",
+    "@types/classnames": "^2.2.7",
+    "@types/history": "^4.7.2",
+    "@types/lodash": "^4.14.123",
+    "@types/react": "^16.8.14",
+    "@types/react-dom": "^16.8.4",
+    "@types/react-loadable": "^5.5.1",
+    "@types/react-redux": "^7.0.8",
+    "@types/react-router": "^4.4.5",
+    "@types/react-router-dom": "^4.3.2",
+    "@types/redux": "^3.6.0",
+    "antd": "^3.16.6",
     "axios": "^0.18.0",
     "history": "^4.7.2",
     "mirror-creator": "^1.1.0",

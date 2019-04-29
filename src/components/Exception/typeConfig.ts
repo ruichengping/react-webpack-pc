@@ -1,4 +1,11 @@
-const config = {
+
+const config:{
+  [key:string]:{
+    img:string,
+    title:string,
+    desc:string
+  }
+} = {
   403: {
     img: '/static/images/403.svg',
     title: '403',
