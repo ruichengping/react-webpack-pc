@@ -1,25 +1,27 @@
-import React, { createElement, ReactElement } from 'react';
+import React, { createElement, ReactElement, ComponentClass} from 'react';
+import {LinkProps} from 'react-router-dom';
 import classNames from 'classnames';
 import { Button } from 'antd';
 import config from './typeConfig';
 import './style.scss';
 
 interface ExceptionProps{
-  className:string,
-  backText:string,
-  linkElement:string,
   type:string,
-  title:string,
-  desc:string,
-  img:string,
-  actions:ReactElement,
+  linkElement:ComponentClass<LinkProps>|string,
+  backText:string,
+  style?:Object,
+  desc?:string,
+  className?:string,
+  title?:string,
+  img?:string,
+  actions?:ReactElement,
   redirect:string
 }
-class Exception extends React.PureComponent<ExceptionProps> {
+class Exception extends React.PureComponent<ExceptionProps>{
   static defaultProps = {
     backText: '返回首页',
     redirect: '/',
-  };
+  }
   render() {
     const {
       className,

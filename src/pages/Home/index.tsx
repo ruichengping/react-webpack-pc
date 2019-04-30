@@ -4,11 +4,15 @@ import {bindActionCreators} from 'redux';
 import * as actions from './redux/actions'; 
 import './style.scss';
 import {Icon} from 'antd';
+
+interface HomeProps{
+  author:Author
+}
 @connect(
-  state=>({user:state.user,author:state.author}),
+  (state:State)=>({user:state.user,author:state.author}),
   dispatch=>bindActionCreators(actions,dispatch)
 )
-class Home extends React.PureComponent{
+class Home extends React.PureComponent<HomeProps>{
   constructor(props){
     super(props);
     const {fetchAuthorData} = props;

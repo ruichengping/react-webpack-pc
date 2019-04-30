@@ -20,13 +20,31 @@ const sexMapper = (sex)=>{
   return selectedSex===undefined? '-' : selectedSex.label;
 }
 
+interface TeachersProps{
+  user:User
+}
+interface TeachersState{
+  pageNo:number,
+  pageSize:number,
+  total:number,
+  userList:{
+    id: number,
+    name: string,
+    age: number,
+    sex: number,
+    tel: string,
+    email: string
+  }[]
+}
+
 @connect(
-  state => ({ user:state.user }),
+  (state:State) => ({ user:state.user }),
 )
-export default class Teachers extends React.PureComponent {
-  state={
+export default class Teachers extends React.PureComponent<TeachersProps,TeachersState> {
+  readonly state={
     pageNo:1,
     pageSize:20,
+    total:0,
     userList:[]
   }
   componentDidMount() {

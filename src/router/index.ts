@@ -6,12 +6,14 @@ import Loading from '@/components/Loading';
 import NotFound from '@/pages/Exception/404';
 
 
+// import Home from '@/pages/Home';
+// import Teachers from '@/pages/Teachers';
 const Home = Loadable({loader: () => import('@/pages/Home'),loading: Loading});
 const Teachers = Loadable({loader: () => import('@/pages/Teachers'),loading: Loading});
 
 export const history = createHistory();
 
-export const routes = [
+export const routes:any = [
   {
     path:'/',
     redirect:'/navone/home'

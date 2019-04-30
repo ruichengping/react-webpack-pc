@@ -1,10 +1,19 @@
 import React from 'react';
+import {Location} from 'history';
 import {Link} from 'react-router-dom';
 import BasicLayout from '../BasicLayout';
 import {Menu,Icon} from 'antd'
 import './style.scss';
 const SubMenu = Menu.SubMenu;
-const navMenuList = [{
+const navMenuList:{
+  title:string,
+  icon:string,
+  path?:string,
+  children?:{
+    title:string,
+    path:string
+  }[]
+}[] = [{
   title:'老师列表',
   icon:'bars',
   path:'/navtwo/teachers'
@@ -24,7 +33,11 @@ const navMenuList = [{
   }]
 }];
 
-class NavTwoLayout extends React.PureComponent{
+interface NavTwoLayoutProps{
+  location:Location
+}
+
+class NavTwoLayout extends React.PureComponent<NavTwoLayoutProps>{
   renderNavMenuList(navMenuList){
     return navMenuList.map((navMenu)=>{
       const {children,title,icon,path} = navMenu;

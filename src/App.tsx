@@ -1,14 +1,14 @@
-import React, { ReactElement, ComponentClass} from 'react';
+import React, { ReactElement, ComponentClass,FunctionComponent} from 'react';
 import {Router} from 'react-router-dom';
 import {Switch, Route ,Redirect} from 'react-router';
 import {history,routes} from '@/router';
 
 type RouteItem = {
   path:string,
-  redirect:string,
-  children:RouteItem[],
-  layout:ComponentClass,
-  component:ComponentClass
+  redirect?:string,
+  children?:RouteItem[],
+  layout?:ComponentClass,
+  component?:ComponentClass|FunctionComponent
 }
 
 function getRouterByRoutes(routes:RouteItem[]){

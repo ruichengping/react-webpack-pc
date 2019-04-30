@@ -7,7 +7,7 @@ interface ErrorBoundaryState {
   hasError:boolean
 }
 export default class ErrorBoundary extends React.PureComponent<ErrorBoundaryProps,ErrorBoundaryState>{
-  state={
+  readonly state={
     hasError:false
   }
   componentDidCatch(error:Error, info:ErrorInfo):void {

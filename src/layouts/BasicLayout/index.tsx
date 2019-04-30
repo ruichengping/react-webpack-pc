@@ -1,22 +1,30 @@
 import React from 'react';
-import {Layout,Menu,Popover,Avatar,Icon} from 'antd';
+import {Menu,Popover,Avatar,Icon,Layout} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Link} from 'react-router-dom';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import {withRouter} from 'react-router';
 import * as globalActions from '../../store/actions';
-const { Header, Content} = Layout;
 import './style.scss';
+const { Header, Content} = Layout;
+
 interface BasicLayoutProps {
-  match?:any
+  match:any,
+  history:any,
+  user:User,
+  className:string
+}
+interface BasicLayoutState{
+  menuSelectedKeys:string[]
 }
 
+
 @connect(
-  (state:any)=>({user:state.user}),
+  (state:State)=>({user:state.user}),
   dispatch=>bindActionCreators(globalActions,dispatch)
 )
-class BasicLayout extends React.PureComponent<BasicLayoutProps>{
+class BasicLayout extends React.PureComponent<BasicLayoutProps,BasicLayoutState>{
   static propTypes = {
     history: PropTypes.object.isRequired,
     match:PropTypes.object.isRequired
@@ -75,4 +83,4 @@ class BasicLayout extends React.PureComponent<BasicLayoutProps>{
     )
   }
 }
-export default withRouter(BasicLayout) ;
+export default withRouter(BasicLayout);

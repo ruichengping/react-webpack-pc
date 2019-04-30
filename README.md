@@ -348,7 +348,7 @@ class App extends React.PureComponent{
 export default App;
 ```
 这里我们需要重点讲的是之间在layouts中我们跳过的内容，能不能不每次都用layout组件去包裹代码，答案是可以的。这里我选择<Route>中的render属性。
-### main.js
+### main.tsx
 webpack入口文件，主要一些全局js或者scss的导入，并执行react-dom下的render方法，代码如下：
 ```
 import React from 'react';
@@ -379,7 +379,7 @@ render(
 这里存放着页面和组件级别构建所需要的模板文件，页面级别构建提供了两种模板PageReducer（集成了reducer）和PageSample（不集成reducer），而组件只提供了一种模板ComSample。页面和组件级别的构建是需要配合asuna-cli才能构建，目前项目已经集成了asuna-cli。package.json写了两个script：npm run newPage（页面构建）和npm run newComponent（组件构建）。开发可根据实际需要选择构建，asuna-cli具体使用可以去[asuna-cli](https://github.com/ruichengping/asuna-cli)查看。
 
 ## 其他文件 
-- .babelrc ---- babel转换的配置文件
+- tsconfig.json ---- typescript配置文件
 - .gitignore ---- git操作所需要忽略的文件
 - .postcssrc.js ---- postcss的配置文件
 - index.html ---- 模板index.html,webpack会根据此生成新的index.html,配合**html-webpack-plugin**使用

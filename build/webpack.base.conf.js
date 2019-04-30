@@ -2,6 +2,7 @@
 const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
+const tsImportPluginFactory = require('ts-import-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -34,7 +35,19 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'ts-loader'
+        loader: 'ts-loader',
+        options: {
+          getCustomTransformers: () => ({
+            transpileOnly:true,
+            before: [
+              tsImportPluginFactory({
+                  libraryDirectory: 'es',
+                  libraryName: 'antd',
+                  style: true
+              })
+            ]
+          })
+        }
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
