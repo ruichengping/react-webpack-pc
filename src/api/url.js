@@ -7,8 +7,8 @@ export default {
     method:'get',
     url:'/api/author'
   },
-  fetchUserList:{
+  fetchTeacherList:{
     method:'get',
-    url:'/api/userList'
+    url:'/api/teacherList'
   }
 }

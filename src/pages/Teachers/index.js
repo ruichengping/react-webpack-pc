@@ -27,14 +27,14 @@ export default class Teachers extends React.PureComponent {
   state={
     pageNo:1,
     pageSize:20,
-    userList:[]
+    teacherList:[]
   }
   componentDidMount() {
     this.loadMainData(true);
   }
   //删除
   handleDelete=(row)=>{
-    const {userList} = this.state;
+    const {teacherList} = this.state;
     Modal.confirm({
       title: '确认',
       okText: '确认',
@@ -42,7 +42,7 @@ export default class Teachers extends React.PureComponent {
       content: `确认是否删除「${row.name}」`,
       onOk:()=>{
         this.setState({
-          userList:userList.filter((item)=>row.id!==item.id)
+          teacherList:teacherList.filter((item)=>row.id!==item.id)
         })
       }
     });
@@ -65,14 +65,14 @@ export default class Teachers extends React.PureComponent {
         pageSize:20
       });
     }
-    API.fetchUserList({
+    API.fetchTeacherList({
       pageNo:isClear?1:pageNo,
       pageSize:isClear?20:pageSize
     }).then((response)=>{
       const {success,message,data} = response;
       if(success){
         this.setState({
-          userList:data.data,
+          teacherList:data.data,
           total:data.total,
           pageNo:data.pageNo
         })
@@ -82,7 +82,7 @@ export default class Teachers extends React.PureComponent {
     });
   }
   render() {
-    const {pageNo,pageSize,userList} = this.state;
+    const {pageNo,pageSize,teacherList} = this.state;
     const { user } = this.props;
     const {username} = user;
     const columns = [
@@ -129,7 +129,7 @@ export default class Teachers extends React.PureComponent {
       <div className="page-pageTwo" >
           <div className="user">Hello,{username}</div>
           <Filter onSearch={this.handleSearch}/>     
-          <Table style={{marginTop:20}} rowKey={row=>row.id} columns={columns} dataSource={userList} pagination={{current:pageNo,pageSize,onChange:this.handlePageChange}}/>  
+          <Table style={{marginTop:20}} rowKey={row=>row.id} columns={columns} dataSource={teacherList} pagination={{current:pageNo,pageSize,onChange:this.handlePageChange}}/>  
       </div>
     )
   }
