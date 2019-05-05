@@ -41,7 +41,7 @@ package.json我配置一个script，如下：
 
 ## src
 ### api 
-**url.js**
+**url.ts**
 ```
 
 export interface Api{
@@ -65,7 +65,7 @@ export const ApiModel:Api= {
   }
 }
 ```
-**index.js**
+**index.ts**
 ```
 import {keys} from 'lodash'
 import http from '@/utils/http'
@@ -101,7 +101,7 @@ export const URL = mapUrlObjToStrObj(ApiModel);
    
    
 ```
-这里我们用来放置api的接口地址，为了后续的接口维护，我们在使用的过程中不会直接写死接口地址，而是将接口请求封装成一个个方法。通过对接口的统一维护，我们就可以做到在执行修改接口地址、修改请求方法、新增接口等等操作时，就不用在整个项目里到处找了，只要维护好url.js向外暴露的对象即可。使用方法如下：
+这里我们用来放置api的接口地址，为了后续的接口维护，我们在使用的过程中不会直接写死接口地址，而是将接口请求封装成一个个方法。通过对接口的统一维护，我们就可以做到在执行修改接口地址、修改请求方法、新增接口等等操作时，就不用在整个项目里到处找了，只要维护好url.ts向外暴露的对象即可。使用方法如下：
 ```
 import {API} from '@/api'
 //params为请求参数
@@ -113,7 +113,7 @@ API.fetchUserInfo(params).then(response=>{
 ### assets
 这里我们会放项目的所需要图片资源，这些图片资源一般来说都是做图标的，都比较小。webpack会将其转化成**BASE64**去使用。如果你不想以这种方式使用，可以在static目录下存放图片资源。
 ### components
-这里存放整个项目所用到的公共组件。定一个组件，这里要求是新建一个文件夹，文件夹名为组件名，另外在这个文件夹下新建index.jsx和style.scss文件。例如做一个HelloWorld组件，则应该是如下结构。
+这里存放整个项目所用到的公共组件。定一个组件，这里要求是新建一个文件夹，文件夹名为组件名，另外在这个文件夹下新建index.tsx和style.scss文件。例如做一个HelloWorld组件，则应该是如下结构。
 
 **HelloWorld**
 - index.tsx
@@ -153,7 +153,7 @@ export default HelloWorld;
 ### layouts
 这里存放着布局文件。关于这个布局文件我是这么去定义它的，我在开发过程中有一些页面他们的某一部分都是相同，早之前可能大家可能会在一个React组件加<Switch>和<Route>去实现这个功能，可以这么干，没毛病。但是这个有一个不好点就是你的路由没法做统一的管理，分散在各个组件中，给后续的维护带来很多问题。为了解决这个，我选择利用props.children结合标签嵌套的方式去完成。举个例子：
 
-先定一个layout（本职也是React组件）BasicLayout.jsx
+先定一个layout（本职也是React组件）BasicLayout.tsx
 ```
 import React,{ReactElement} from 'react';
 
@@ -257,7 +257,7 @@ const store=createStore(
 )
 export default store;
 ```
-这里有一个小细节，redux-thunk是可以携带一些额外的对象或者方法的，这里，我携带API对象。当我们需要在actions.js里面使用API对象时，就不需要再import导入进来。下面我们做个对比：
+这里有一个小细节，redux-thunk是可以携带一些额外的对象或者方法的，这里，我携带API对象。当我们需要在actions.ts里面使用API对象时，就不需要再import导入进来。下面我们做个对比：
 
 **修改前**
 ```
@@ -292,10 +292,10 @@ export const fecthUserName=(params?:any)=> async (dispatch:Dispatch,getState:Fun
 }
 ```
 ### utils
-这里会存放一些自己的封装的js工具文件，比如我在项目基于axios封装了一个http.js,简化了axios的操作。
+这里会存放一些自己的封装的ts工具文件，比如我在项目基于axios封装了一个http.ts,简化了axios的操作。
 
 ### router/index.ts
-这里以配置化的防止去注册路由，并app.js里面去渲染路由标签。
+这里以配置化的防止去注册路由，并app.tsx里面去渲染路由标签。
 ```
 import { ComponentClass, ComponentType } from 'react';
 import Loadable from 'react-loadable';
@@ -405,7 +405,7 @@ export default App;
 ```
 这里我们需要重点讲的是之间在layouts中我们跳过的内容，能不能不每次都用layout组件去包裹代码，答案是可以的。这里我选择<Route>中的render属性。
 ### main.tsx
-webpack入口文件，主要一些全局js或者scss的导入，并执行react-dom下的render方法，代码如下：
+webpack入口文件，主要一些全局ts或者scss的导入，并执行react-dom下的render方法，代码如下：
 ```
 import React from 'react';
 import {render} from 'react-dom';
