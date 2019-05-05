@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^8.6.3",
+    "babel-polyfill": "^6.26.0",
     "chalk": "^2.4.1",
     "clean-webpack-plugin": "^2.0.0",
     "copy-webpack-plugin": "^4.5.1",
@@ -63,6 +64,7 @@
     "antd": "3.16.5",
     "axios": "^0.18.0",
     "history": "^4.7.2",
+    "lodash": "^4.17.11",
     "mirror-creator": "^1.1.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
