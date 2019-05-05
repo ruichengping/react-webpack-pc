@@ -9,7 +9,6 @@
     "dev": "node_modules/.bin/webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "build": "node build/build.js",
-    "chunk": "webpack --config build/webpack.prod.conf.js",
     "mock": "json-server mock/index.js  --port 3000 --routes mock/routes.json",
     "newPage": "asuna new page",
     "newComponent": "asuna new component"
@@ -64,6 +63,7 @@
   "dependencies": {
     "antd": "^3.6.4",
     "axios": "^0.18.0",
+    "lodash": "^4.17.11",
     "mirror-creator": "^1.1.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",

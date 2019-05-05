@@ -14,7 +14,7 @@ const instance=axios.create({
 instance.interceptors.response.use(function (response) {
   const {status,data,statusText}=response;
   if(status===200){
-    return JSON.parse(response.data);  
+    return JSON.parse(data);  
   }else if(status===401){
     //跳转登录
   }else{
