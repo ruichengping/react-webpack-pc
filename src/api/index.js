@@ -1,10 +1,10 @@
-import _ from 'lodash'
+import {keys} from 'lodash'
 import http from '@/utils/http'
 import API_URL from './url';
 
 function mapUrlObjToFuncObj(urlObj){
   const API = {};
-  _.keys(urlObj).forEach((key)=>{
+  keys(urlObj).forEach((key)=>{
     const item = urlObj[key]
     API[key]=function(params){
       return http[item.method](item.url,params)
@@ -15,7 +15,7 @@ function mapUrlObjToFuncObj(urlObj){
 
 function mapUrlObjToStrObj(urlObj){
   const Url = {};
-  _.keys(urlObj).forEach((key)=>{
+  keys(urlObj).forEach((key)=>{
     const item = urlObj[key]
     Url[key]=item.url
   });

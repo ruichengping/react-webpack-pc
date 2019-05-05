@@ -100,10 +100,10 @@ API.fetchUserInfo(params).then(response=>{
 ### assets
 这里我们会放项目的所需要图片资源，这些图片资源一般来说都是做图标的，都比较小。webpack会将其转化成**BASE64**去使用。如果你不想以这种方式使用，可以在static目录下存放图片资源。
 ### components
-这里存放整个项目所用到的公共组件。定一个组件，这里要求是新建一个文件夹，文件夹名为组件名，另外在这个文件夹下新建index.jsx和style.scss文件。例如做一个HelloWorld组件，则应该是如下结构。
+这里存放整个项目所用到的公共组件。定一个组件，这里要求是新建一个文件夹，文件夹名为组件名，另外在这个文件夹下新建index.js和style.scss文件。例如做一个HelloWorld组件，则应该是如下结构。
 
 **HelloWorld**
-- index.jsx
+- index.js
 - style.scss //存放组件的样式
 
 **index.js**
@@ -129,7 +129,7 @@ export default HelloWorld;
 ### layouts
 这里存放着布局文件。关于这个布局文件我是这么去定义它的，我在开发过程中有一些页面他们的某一部分都是相同，早之前可能大家可能会在一个React组件加<Switch>和<Route>去实现这个功能，可以这么干，没毛病。但是这个有一个不好点就是你的路由没法做统一的管理，分散在各个组件中，给后续的维护带来很多问题。为了解决这个，我选择利用props.children结合标签嵌套的方式去完成。举个例子：
 
-先定一个layout（本职也是React组件）BasicLayout.jsx
+先定一个layout（本职也是React组件）BasicLayout.js
 ```
 import React from 'react';
 class BasicLayout extends React.PureComponent{
@@ -178,12 +178,12 @@ export default BasicLayout;
     </div> 
 </div>
 ```
-使用这种方法就可以将我们得所有路由写在一起了，可能有人觉得每次都要写引入BasicLayout很麻烦，有没有其他更好用的办法，在讲App.jsx的时候会说到这里就先跳过。
+使用这种方法就可以将我们得所有路由写在一起了，可能有人觉得每次都要写引入BasicLayout很麻烦，有没有其他更好用的办法，在讲App.js的时候会说到这里就先跳过。
 ### pages
 这里的存放的都是页面级组件，跟react-router对应的路由需要一一对应。每个页面都是一个文件夹，文件名就是页面名称，每个页面都要包含如下几个文件：
 - components ---- 存放当前页独有的一些组件
 - redux ---- 存放三个文件**actions.js**、**actionTypes.js**、**reducer.js**,这几个文件应该只与这个页面相关
-- index.jsx ---- 页面的入口文件
+- index.js ---- 页面的入口文件
 - style.scss ---- 页面所需要的样式
 具体代码可以自行git clone 项目查看，这里就不贴出来了。
 ### scss
