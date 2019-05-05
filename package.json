@@ -62,6 +62,7 @@
   "dependencies": {
     "antd": "^3.6.4",
     "axios": "^0.18.0",
+    "lodash": "^4.17.11",
     "mirror-creator": "^1.1.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
