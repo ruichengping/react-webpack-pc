@@ -11,12 +11,9 @@
     "build": "node build/build.js",
     "chunk": "webpack --config build/webpack.prod.conf.js",
     "mock": "json-server mock/index.js  --port 3000 --routes mock/routes.json",
-    "preview": "node server.js",
-    "newPage": "asuna new page",
-    "newComponent": "asuna new component"
+    "preview": "node server.js"
   },
   "devDependencies": {
-    "asuna-cli": "^1.0.0",
     "autoprefixer": "^8.6.3",
     "chalk": "^2.4.1",
     "clean-webpack-plugin": "^2.0.0",

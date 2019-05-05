@@ -1,3 +1,4 @@
+import { ComponentClass, ComponentType } from 'react';
 import Loadable from 'react-loadable';
 import createHistory from 'history/createBrowserHistory';
 import BasicLayout from '@/layouts/BasicLayout';
@@ -9,7 +10,14 @@ const Teachers = Loadable({loader: () => import('@/pages/Teachers'),loading: Loa
 
 export const history = createHistory();
 
-export const routes:any = [
+interface RouteItem{
+  path:string,
+  redirect?:string,
+  layout?:ComponentClass
+  children?:RouteItem[]
+  component?:ComponentType
+}
+export const routes:RouteItem[] = [
   {
     path:'/',
     redirect:'/navone/home'

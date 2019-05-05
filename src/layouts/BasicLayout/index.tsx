@@ -2,16 +2,14 @@ import React from 'react';
 import {Menu,Popover,Avatar,Icon,Layout} from 'antd';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {Link} from 'react-router-dom';
-import PropTypes from 'prop-types';
+import {Link,RouteComponentProps} from 'react-router-dom';
 import {withRouter} from 'react-router';
 import * as globalActions from '../../store/actions';
 import './style.scss';
 const { Header, Content} = Layout;
 
-interface BasicLayoutProps{
-  match:any,
-  history:any,
+interface BasicLayoutProps extends RouteComponentProps{
+  fecthUserName:Function
   user:User,
   className:string
 }
@@ -20,16 +18,8 @@ interface BasicLayoutState{
 }
 
 
-@connect(
-  (state:State)=>({user:state.user}),
-  dispatch=>bindActionCreators(globalActions,dispatch)
-)
 class BasicLayout extends React.PureComponent<BasicLayoutProps,BasicLayoutState>{
-  static propTypes = {
-    history: PropTypes.object.isRequired,
-    match:PropTypes.object.isRequired
-  }
-  constructor(props){
+  constructor(props:BasicLayoutProps){
     super(props);
     const {match} = props;
     const {fecthUserName} = props;
@@ -39,7 +29,7 @@ class BasicLayout extends React.PureComponent<BasicLayoutProps,BasicLayoutState>
     }
   }
   //响应导航栏跳转
-  handleMenuClick=({key})=>{
+  handleMenuClick=({key}:any)=>{
     const {history} = this.props;
     history.push(key);
   }
@@ -83,4 +73,7 @@ class BasicLayout extends React.PureComponent<BasicLayoutProps,BasicLayoutState>
     )
   }
 }
-export default withRouter(BasicLayout);
+export default connect(
+  (state:State)=>({user:state.user}),
+  dispatch=>bindActionCreators(globalActions,dispatch)
+)(withRouter(BasicLayout));

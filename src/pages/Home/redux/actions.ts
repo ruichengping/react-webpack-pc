@@ -1,6 +1,8 @@
 import * as actionTypes from './actionTypes';
 
-export const fetchAuthorData=(params)=>async (dispatch,getState,{API})=>{
+import {Dispatch} from 'redux';
+
+export const fetchAuthorData=(params:any)=>async (dispatch:Dispatch,getState:Function,{API}:any)=>{
   const response= await API.fetchAuthorInfo(params);
   const {success,data} = response;
   if(success){

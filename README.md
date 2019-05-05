@@ -43,7 +43,14 @@ package.json我配置一个script，如下：
 ### api 
 **url.js**
 ```
-export default {
+
+export interface Api{
+  [propName:string]:{
+    method:'get'|'post'|'delete',
+    url:string
+  }
+}
+export const ApiModel:Api= {
   fetchUserInfo:{
     method:'get',
     url:'/api/user'
@@ -52,40 +59,46 @@ export default {
     method:'get',
     url:'/api/author'
   },
-  fetchUserList:{
+  fetchTeacherList:{
     method:'get',
-    url:'/api/userList'
+    url:'/api/teacherList'
   }
 }
 ```
 **index.js**
 ```
-import _ from 'lodash'
+import {keys} from 'lodash'
 import http from '@/utils/http'
-import API_URL from './url';
+import {Api,ApiModel} from './url';
 
-function mapUrlObjToFuncObj(urlObj){
-  const API = {};
-  _.keys(urlObj).forEach((key)=>{
-    const item = urlObj[key]
-    API[key]=function(params){
+
+function mapUrlObjToFuncObj(apiModel:Api){
+  const API: {
+    [propName:string]:Function
+  } = {};
+  keys(apiModel).forEach((key:string)=>{
+    const item = apiModel[key]
+    API[key]=function(params:any){
       return http[item.method](item.url,params)
     }
   });
   return API;
 }
 
-function mapUrlObjToStrObj(urlObj){
-  const Url = {};
-  _.keys(urlObj).forEach((key)=>{
-    const item = urlObj[key]
+function mapUrlObjToStrObj(apiModel:Api){
+  const Url:{
+    [propName:string]:string
+  } = {};
+  keys(apiModel).forEach((key:string)=>{
+    const item = apiModel[key]
     Url[key]=item.url
   });
   return Url;
 }
 
-export const API = mapUrlObjToFuncObj(API_URL);
-export const URL = mapUrlObjToStrObj(API_URL);
+export const API = mapUrlObjToFuncObj(ApiModel);
+export const URL = mapUrlObjToStrObj(ApiModel);
+   
    
 ```
 这里我们用来放置api的接口地址，为了后续的接口维护，我们在使用的过程中不会直接写死接口地址，而是将接口请求封装成一个个方法。通过对接口的统一维护，我们就可以做到在执行修改接口地址、修改请求方法、新增接口等等操作时，就不用在整个项目里到处找了，只要维护好url.js向外暴露的对象即可。使用方法如下：
@@ -103,15 +116,26 @@ API.fetchUserInfo(params).then(response=>{
 这里存放整个项目所用到的公共组件。定一个组件，这里要求是新建一个文件夹，文件夹名为组件名，另外在这个文件夹下新建index.jsx和style.scss文件。例如做一个HelloWorld组件，则应该是如下结构。
 
 **HelloWorld**
-- index.jsx
+- index.tsx
 - style.scss //存放组件的样式
 
-**index.js**
+**index.tsx**
 
 ```
 import React from 'react';
 import './style.scss';
-class HelloWorld extends React.PureComponent{
+
+interface HelloWorldState{
+
+}
+interface HelloWorldProps{
+
+}
+
+class HelloWorld extends React.PureComponent<HelloWorldProps,HelloWorldState>{
+  readonly state = {
+
+  }
   render(){
     return (
       <h4 className="u-text">Hello World</h4>
@@ -131,25 +155,42 @@ export default HelloWorld;
 
 先定一个layout（本职也是React组件）BasicLayout.jsx
 ```
-import React from 'react';
-class BasicLayout extends React.PureComponent{
-    render(){
-        const {children} = this.props;
-        return (
-            <div>
-                <div>隔壁老王今日行程：</div>
-                <div>{children}</div>
-            </div>
-        )
-    }
+import React,{ReactElement} from 'react';
+
+interface BasicLayoutState{
+
+}
+interface BasicLayoutProps{
+  children:ReactElement
+}
+class BasicLayout extends React.PureComponent<BasicLayoutProps,BasicLayoutState>{
+  readonly state = {
+
+  }
+  render(){
+      const {children} = this.props;
+      return (
+          <div>
+              <div>隔壁老王今日行程：</div>
+              <div>{children}</div>
+          </div>
+      )
+  }
 }
 export default BasicLayout;
 ```
 定义完之后我们可以这么使用：
 ```
 import React from 'react';
-import BasicLayout from '<BasicLayout的路径>'
-class Work extends React.PureComponent{
+import BasicLayout from '<BasicLayout的路径>';
+
+interface WorkState{
+
+}
+interface WorkProps{
+
+}
+class Work extends React.PureComponent<WorkProps,WorkState>{
     render(){
         return (
             <BasicLayout>
@@ -178,34 +219,36 @@ export default BasicLayout;
     </div> 
 </div>
 ```
-使用这种方法就可以将我们得所有路由写在一起了，可能有人觉得每次都要写引入BasicLayout很麻烦，有没有其他更好用的办法，在讲App.jsx的时候会说到这里就先跳过。
+使用这种方法就可以将我们得所有路由写在一起了，可能有人觉得每次都要写引入BasicLayout很麻烦，有没有其他更好用的办法，在讲App.tsx的时候会说到这里就先跳过。
 ### pages
 这里的存放的都是页面级组件，跟react-router对应的路由需要一一对应。每个页面都是一个文件夹，文件名就是页面名称，每个页面都要包含如下几个文件：
 - components ---- 存放当前页独有的一些组件
-- redux ---- 存放三个文件**actions.js**、**actionTypes.js**、**reducer.js**,这几个文件应该只与这个页面相关
-- index.jsx ---- 页面的入口文件
+- redux ---- 存放三个文件**actions.ts**、**actionTypes.ts**、**reducer.ts**,这几个文件应该只与这个页面相关
+- index.tsx ---- 页面的入口文件
 - style.scss ---- 页面所需要的样式
 具体代码可以自行git clone 项目查看，这里就不贴出来了。
 ### scss
 这里存放共有的scss文件，比较一些常用的功能类、@mixin、@function等等。
 ### store
 这里有四个文件：
-- **actions.js**
-- **actionTypes.js**
-- **reducer.js**
-- **index.js**
+- **actions.ts**
+- **actionTypes.ts**
+- **reducer.ts**
+- **index.ts**
 
-我们知道每个页面都有自己的**actions.js**、**actionTypes.js**、**reducer.js**，但是这里是全局的，另外index.js会向外暴露store，然后再main.js中引入使用。
+我们知道每个页面都有自己的**actions.ts**、**actionTypes.ts**、**reducer.ts**，但是这里是全局的，另外index.ts会向外暴露store，然后再main.tsx中引入使用。
 ```
 import {createStore,combineReducers,applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
-import API from '@/api';
+import {API} from '@/api';
 import user from './reducer';
-import author from '@/pages/PageOne/redux/reducer'
+import author from '@/pages/Home/redux/reducer';
+
 const rootReducer = combineReducers({
-    user,
-    author
-  });
+  user,
+  author
+})
+
 const store=createStore(
   rootReducer,
   applyMiddleware(thunk.withExtraArgument({
@@ -221,7 +264,7 @@ export default store;
 import * as actionTypes from './actionTypes';
 import API from '../api';
 
-export const fecthUserName=(params)=> async (dispatch,getState)=>{
+export const fecthUserName=(params)=> async (dispatch:Dispatch,getState:Function)=>{
   const response =await API.fetchUserInfo(params);
   const {success,data} = response;
   if(success){
@@ -235,8 +278,9 @@ export const fecthUserName=(params)=> async (dispatch,getState)=>{
 **修改后**
 ```
 import * as actionTypes from './actionTypes';
+import { Dispatch } from 'redux';
 
-export const fecthUserName=(params)=> async (dispatch,getState,{API})=>{
+export const fecthUserName=(params?:any)=> async (dispatch:Dispatch,getState:Function,{API}:any)=>{
   const response =await API.fetchUserInfo(params);
   const {success,data} = response;
   if(success){
@@ -250,23 +294,29 @@ export const fecthUserName=(params)=> async (dispatch,getState,{API})=>{
 ### utils
 这里会存放一些自己的封装的js工具文件，比如我在项目基于axios封装了一个http.js,简化了axios的操作。
 
-### router/index.js
+### router/index.ts
 这里以配置化的防止去注册路由，并app.js里面去渲染路由标签。
 ```
+import { ComponentClass, ComponentType } from 'react';
 import Loadable from 'react-loadable';
 import createHistory from 'history/createBrowserHistory';
 import BasicLayout from '@/layouts/BasicLayout';
 import NavTwoLayout from '@/layouts/NavTwoLayout';
 import Loading from '@/components/Loading';
 import NotFound from '@/pages/Exception/404';
-
-
 const Home = Loadable({loader: () => import('@/pages/Home'),loading: Loading});
 const Teachers = Loadable({loader: () => import('@/pages/Teachers'),loading: Loading});
 
 export const history = createHistory();
 
-export const routes = [
+interface RouteItem{
+  path:string,
+  redirect?:string,
+  layout?:ComponentClass
+  children?:RouteItem[]
+  component?:ComponentType
+}
+export const routes:RouteItem[] = [
   {
     path:'/',
     redirect:'/navone/home'
@@ -295,19 +345,25 @@ export const routes = [
   }
 ]
 ```
-### App.js
+### App.tsx
 这里根据路由配置用来渲染路由标签，先放代码：
 ```
-import React from 'react';
+import React, { ReactElement,ComponentClass,ComponentType} from 'react';
 import {Router} from 'react-router-dom';
 import {Switch, Route ,Redirect} from 'react-router';
 import {history,routes} from '@/router';
 
+interface RouteItem {
+  path:string,
+  redirect?:string,
+  children?:RouteItem[],
+  layout?:ComponentClass,
+  component?:ComponentType
+}
 
-
-function getRouterByRoutes(routes){
-  const renderedRoutesList = [];
-  const renderRoutes = (routes,parentPath)=>{
+function getRouterByRoutes(routes:RouteItem[]){
+  const renderedRoutesList:ReactElement[] = [];
+  const renderRoutes = (routes:RouteItem[],parentPath:string)=>{
     Array.isArray(routes)&&routes.forEach((route)=>{
       const {path,redirect,children,layout,component} = route;
       if(redirect){
@@ -318,7 +374,7 @@ function getRouterByRoutes(routes){
           layout?<Route 
             key={`${parentPath}${path}`} 
             exact path={`${parentPath}${path}`}
-            render={(props)=>React.createElement(layout,props,React.createElement(component,props))} />:
+            render={(props:any)=>React.createElement(layout,props,React.createElement(component,props))} />:
           <Route 
               key={`${parentPath}${path}`} 
               exact 
@@ -355,10 +411,9 @@ import React from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import store from '@/store';
-import App from '@/App';
+import App from './App';
 import '@/scss/reset.scss';
 import '@/scss/base.scss';
-
 
 render(
   <Provider store={store}>
@@ -374,9 +429,6 @@ render(
 - 一些比较大的第三方工具库会影响我们的打包速度，可以把它拿出来通过script的方式引入
 
 其实第三方工具库最好的方式是CDN，但是有些公司就是没有，无奈只能如此。你加入的第三工具库都可在当前服务器下”**/static/***“路径下获取到。
-## templates
-
-这里存放着页面和组件级别构建所需要的模板文件，页面级别构建提供了两种模板PageReducer（集成了reducer）和PageSample（不集成reducer），而组件只提供了一种模板ComSample。页面和组件级别的构建是需要配合asuna-cli才能构建，目前项目已经集成了asuna-cli。package.json写了两个script：npm run newPage（页面构建）和npm run newComponent（组件构建）。开发可根据实际需要选择构建，asuna-cli具体使用可以去[asuna-cli](https://github.com/ruichengping/asuna-cli)查看。
 
 ## 其他文件 
 - tsconfig.json ---- typescript配置文件
@@ -386,7 +438,6 @@ render(
 - package.json ---- 家喻户晓的东西
 - README.md ---- 项目说明
 - theme.js ----  ant-design的主题色配置文件，具体使用可以参考ant-design
-- asuna.config.js ---- asuna-cli的配置文件
 - yarn.lock ---- 锁定包的版本
 ## 结语
 这个只是个人搭建企业级React项目的一些总结。当然存在不足的地方，后面在工作过程中如果有一些好的想法也会在这上面进行更新。欢迎大家Star关注！如果你也有好的想法欢迎留言交流，希望这篇拙文能给大家一些启发。

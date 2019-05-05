@@ -7,9 +7,10 @@
       "dom",
       "esNext"
     ],                                             
-    "jsx": "react",   
-    // "strict": true,                                      
-    "baseUrl": ".",                      
+    "jsx": "react",                                        
+    "baseUrl": ".",    
+    "noImplicitAny":true,      
+    "noUnusedLocals":true,      
     "paths": {
       "@/*":["src/*"]
     },                           

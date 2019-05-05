@@ -4,16 +4,17 @@ import {Link} from 'react-router-dom';
 import BasicLayout from '../BasicLayout';
 import {Menu,Icon} from 'antd'
 import './style.scss';
-const SubMenu = Menu.SubMenu;
-const navMenuList:{
+
+
+interface NavMenu{
   title:string,
-  icon:string,
+  icon?:string,
   path?:string,
-  children?:{
-    title:string,
-    path:string
-  }[]
-}[] = [{
+  children?:NavMenu[]
+}
+const SubMenu = Menu.SubMenu;
+
+const navMenuList:NavMenu[] = [{
   title:'老师列表',
   icon:'bars',
   path:'/navtwo/teachers'
@@ -38,7 +39,7 @@ interface NavTwoLayoutProps{
 }
 
 class NavTwoLayout extends React.PureComponent<NavTwoLayoutProps>{
-  renderNavMenuList(navMenuList){
+  renderNavMenuList(navMenuList:NavMenu[]){
     return navMenuList.map((navMenu)=>{
       const {children,title,icon,path} = navMenu;
       if(children){
@@ -48,15 +49,15 @@ class NavTwoLayout extends React.PureComponent<NavTwoLayoutProps>{
       }
     })
   } 
-  getOpenKeyAndSelectedKey(navMenuList,matchedPath){
-    const openKeys=[],selectedKeys=[];
+  getOpenKeyAndSelectedKey(navMenuList:NavMenu[],matchedPath:string){
+    const openKeys:string[]=[],selectedKeys:string[]=[];
     Array.isArray(navMenuList)&&navMenuList.forEach((navMenu)=>{
       const {title,path,children} = navMenu;
       if(children){
         const matchedChild=children.find((child)=>child.path===matchedPath)
         if(matchedChild){
           openKeys.push(title);
-          selectedKeys.push(matchedChild.path);
+          matchedChild.path&&selectedKeys.push(matchedChild.path);
         }
       }else if(path===matchedPath){
         selectedKeys.push(path);

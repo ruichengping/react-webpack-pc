@@ -27,14 +27,7 @@ interface TeachersState{
   pageNo:number,
   pageSize:number,
   total:number,
-  teacherList:{
-    id: number,
-    name: string,
-    age: number,
-    sex: number,
-    tel: string,
-    email: string
-  }[]
+  teacherList:TeacherItem[]
 }
 interface TeacherItem  {
   id: number,
@@ -45,7 +38,7 @@ interface TeacherItem  {
   email: string
 }
 
-const initialState = {
+const initialState:TeachersState = {
   pageNo:1,
   pageSize:20,
   total:0,
