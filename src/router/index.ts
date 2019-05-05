@@ -4,10 +4,6 @@ import BasicLayout from '@/layouts/BasicLayout';
 import NavTwoLayout from '@/layouts/NavTwoLayout';
 import Loading from '@/components/Loading';
 import NotFound from '@/pages/Exception/404';
-
-
-// import Home from '@/pages/Home';
-// import Teachers from '@/pages/Teachers';
 const Home = Loadable({loader: () => import('@/pages/Home'),loading: Loading});
 const Teachers = Loadable({loader: () => import('@/pages/Teachers'),loading: Loading});
 

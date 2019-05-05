@@ -2,10 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import {Table,Modal,message as Message} from "antd";
 import {API} from '@/api';
-import Filter from './components/Filter';
+import Filter,{FilterFormData} from './components/Filter';
 import "./style.scss";
 
-export const sexs = [
+export const sexs:Options = [
   {
     label:'男',
     value:1
@@ -15,7 +15,7 @@ export const sexs = [
     value:2
   }
 ]
-const sexMapper = (sex)=>{
+const sexMapper = (sex:string)=>{
   const selectedSex = sexs.find((item)=>item.value === sex);
   return selectedSex===undefined? '-' : selectedSex.label;
 }
@@ -27,7 +27,7 @@ interface TeachersState{
   pageNo:number,
   pageSize:number,
   total:number,
-  userList:{
+  teacherList:{
     id: number,
     name: string,
     age: number,
@@ -36,23 +36,33 @@ interface TeachersState{
     email: string
   }[]
 }
+interface TeacherItem  {
+  id: number,
+  name: string,
+  age: number,
+  sex: number,
+  tel: string,
+  email: string
+}
+
+const initialState = {
+  pageNo:1,
+  pageSize:20,
+  total:0,
+  teacherList:[]
+}
 
 @connect(
   (state:State) => ({ user:state.user }),
 )
 export default class Teachers extends React.PureComponent<TeachersProps,TeachersState> {
-  readonly state={
-    pageNo:1,
-    pageSize:20,
-    total:0,
-    userList:[]
-  }
+  readonly state = initialState
   componentDidMount() {
     this.loadMainData(true);
   }
   //删除
-  handleDelete=(row)=>{
-    const {userList} = this.state;
+  handleDelete=(row:TeacherItem)=>{
+    const {teacherList} = this.state;
     Modal.confirm({
       title: '确认',
       okText: '确认',
@@ -60,22 +70,22 @@ export default class Teachers extends React.PureComponent<TeachersProps,Teachers
       content: `确认是否删除「${row.name}」`,
       onOk:()=>{
         this.setState({
-          userList:userList.filter((item)=>row.id!==item.id)
+          teacherList:teacherList.filter((item)=>row.id!==item.id)
         })
       }
     });
   }
   //响应分页
-  handlePageChange=(page,pageSize)=>{
+  handlePageChange=(page:number,pageSize:number)=>{
     console.log(`当前页：${page}，分页大小：${pageSize}`)
   }
   //搜索
-  handleSearch=(params)=>{
+  handleSearch=(params:FilterFormData)=>{
     console.log(params);
   }
 
   //拉取数据
-  loadMainData(isClear){
+  loadMainData(isClear:boolean){
     const {pageNo,pageSize} = this.state;
     if(isClear){
       this.setState({
@@ -83,14 +93,14 @@ export default class Teachers extends React.PureComponent<TeachersProps,Teachers
         pageSize:20
       });
     }
-    API.fetchUserList({
+    API.fetchTeacherList({
       pageNo:isClear?1:pageNo,
       pageSize:isClear?20:pageSize
-    }).then((response)=>{
+    }).then((response:HttpResponse<any>)=>{
       const {success,message,data} = response;
       if(success){
         this.setState({
-          userList:data.data,
+          teacherList:data.data,
           total:data.total,
           pageNo:data.pageNo
         })
@@ -100,7 +110,7 @@ export default class Teachers extends React.PureComponent<TeachersProps,Teachers
     });
   }
   render() {
-    const {pageNo,pageSize,userList} = this.state;
+    const {pageNo,pageSize,teacherList} = this.state;
     const { user } = this.props;
     const {username} = user;
     const columns = [
@@ -108,7 +118,7 @@ export default class Teachers extends React.PureComponent<TeachersProps,Teachers
         key:'index',
         title: "序号",
         dataIndex: "index",
-        render: (value,row,index) => (pageNo-1)*pageSize+index+1
+        render: (value:any,row:TeacherItem,index:number) => (pageNo-1)*pageSize+index+1
       },
       {
         key:'name',
@@ -124,7 +134,7 @@ export default class Teachers extends React.PureComponent<TeachersProps,Teachers
         key:'sex',
         title: "性别",
         dataIndex: "sex",
-        render: (value,row,index) => sexMapper(value)
+        render: (value:any,row:TeacherItem,index:number) => sexMapper(value)
       },
       {
         key:'tel',
@@ -140,14 +150,14 @@ export default class Teachers extends React.PureComponent<TeachersProps,Teachers
         key:'action',
         title: "操作",
         dataIndex: "action",
-        render: (value,row,index) => <a href="javascript:;" onClick={()=>{this.handleDelete(row)}}>删除</a>
+        render: (value:any,row:TeacherItem,index:number) => <a href="javascript:;" onClick={()=>{this.handleDelete(row)}}>删除</a>
       }
     ]
     return (
       <div className="page-pageTwo" >
           <div className="user">Hello,{username}</div>
           <Filter onSearch={this.handleSearch}/>     
-          <Table style={{marginTop:20}} rowKey={row=>row.id} columns={columns} dataSource={userList} pagination={{current:pageNo,pageSize,onChange:this.handlePageChange}}/>  
+          <Table style={{marginTop:20}} rowKey={(row:TeacherItem):string=>row.id+''} columns={columns} dataSource={teacherList} pagination={{current:pageNo,pageSize:(pageSize as number),onChange:this.handlePageChange}}/>  
       </div>
     )
   }

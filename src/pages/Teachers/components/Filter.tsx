@@ -8,6 +8,10 @@ interface FilterProps{
   form:any
 }
 
+export interface FilterFormData{
+  name:string,
+  sex:string
+}
 class Filter extends React.PureComponent<FilterProps>{
   //搜索
   handleSubmit=(e:FormEvent)=>{

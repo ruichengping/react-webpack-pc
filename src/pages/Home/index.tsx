@@ -6,16 +6,16 @@ import './style.scss';
 import {Icon} from 'antd';
 
 interface HomeProps{
-  author:Author
+  author:Author,
+  fetchAuthorData:Function
 }
 @connect(
   (state:State)=>({user:state.user,author:state.author}),
   dispatch=>bindActionCreators(actions,dispatch)
 )
 class Home extends React.PureComponent<HomeProps>{
-  constructor(props){
-    super(props);
-    const {fetchAuthorData} = props;
+  componentDidMount(){
+    const {fetchAuthorData} = this.props;
     fetchAuthorData();
   }
   render(){

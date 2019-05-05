@@ -6,7 +6,6 @@ import App from './App';
 import '@/scss/reset.scss';
 import '@/scss/base.scss';
 
-
 render(
   <Provider store={store}>
     <App/>

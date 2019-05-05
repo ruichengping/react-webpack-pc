@@ -9,7 +9,7 @@ import * as globalActions from '../../store/actions';
 import './style.scss';
 const { Header, Content} = Layout;
 
-interface BasicLayoutProps {
+interface BasicLayoutProps{
   match:any,
   history:any,
   user:User,
@@ -29,7 +29,7 @@ class BasicLayout extends React.PureComponent<BasicLayoutProps,BasicLayoutState>
     history: PropTypes.object.isRequired,
     match:PropTypes.object.isRequired
   }
-  constructor(props:any){
+  constructor(props){
     super(props);
     const {match} = props;
     const {fecthUserName} = props;

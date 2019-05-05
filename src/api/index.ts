@@ -1,19 +1,14 @@
 import _ from 'lodash'
 import http from '@/utils/http'
-import API_URL from './url';
+import {Api,ApiModel} from './url';
 
-type UrlObj = {
-  [key:string]:{
-    method:string,
-    url:string
-  }
-}
-function mapUrlObjToFuncObj(urlObj:UrlObj){
+
+function mapUrlObjToFuncObj(apiModel:Api){
   const API: {
-    [key:string]:Function
+    [propName:string]:Function
   } = {};
-  _.keys(urlObj).forEach((key:string)=>{
-    const item = urlObj[key]
+  _.keys(apiModel).forEach((key:string)=>{
+    const item = apiModel[key]
     API[key]=function(params:any){
       return http[item.method](item.url,params)
     }
@@ -21,17 +16,17 @@ function mapUrlObjToFuncObj(urlObj:UrlObj){
   return API;
 }
 
-function mapUrlObjToStrObj(urlObj:UrlObj){
+function mapUrlObjToStrObj(apiModel:Api){
   const Url:{
-    [key:string]:string
+    [propName:string]:string
   } = {};
-  _.keys(urlObj).forEach((key:string)=>{
-    const item = urlObj[key]
+  _.keys(apiModel).forEach((key:string)=>{
+    const item = apiModel[key]
     Url[key]=item.url
   });
   return Url;
 }
 
-export const API = mapUrlObjToFuncObj(API_URL);
-export const URL = mapUrlObjToStrObj(API_URL);
+export const API = mapUrlObjToFuncObj(ApiModel);
+export const URL = mapUrlObjToStrObj(ApiModel);
    

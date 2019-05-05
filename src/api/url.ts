@@ -1,4 +1,11 @@
-export default {
+
+export interface Api{
+  [propName:string]:{
+    method:'get'|'post'|'delete',
+    url:string
+  }
+}
+export const ApiModel:Api= {
   fetchUserInfo:{
     method:'get',
     url:'/api/user'
@@ -7,8 +14,8 @@ export default {
     method:'get',
     url:'/api/author'
   },
-  fetchUserList:{
+  fetchTeacherList:{
     method:'get',
-    url:'/api/userList'
+    url:'/api/teacherList'
   }
 }
