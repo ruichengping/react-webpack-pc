@@ -4,7 +4,7 @@ import {Form, Input, Select, Button} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 interface FilterProps{
-  onSearch:Function,
+  onSearch(data:{[propName:string]:any}):void,
   form:any
 }
 

@@ -7,7 +7,7 @@ import {Icon} from 'antd';
 
 interface HomeProps{
   author:Author,
-  fetchAuthorData:Function
+  fetchAuthorData():any
 }
 @connect(
   (state:State)=>({user:state.user,author:state.author}),

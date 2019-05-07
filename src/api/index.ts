@@ -2,14 +2,13 @@ import {keys} from 'lodash'
 import http from '@/utils/http'
 import {Api,ApiModel} from './url';
 
-
 function mapUrlObjToFuncObj(apiModel:Api){
   const API: {
-    [propName:string]:Function
+    [propName:string]:(params?:Params)=>any
   } = {};
   keys(apiModel).forEach((key:string)=>{
     const item = apiModel[key]
-    API[key]=function(params:any){
+    API[key]=function(params:Params){
       return http[item.method](item.url,params)
     }
   });
@@ -29,4 +28,3 @@ function mapUrlObjToStrObj(apiModel:Api){
 
 export const API = mapUrlObjToFuncObj(ApiModel);
 export const URL = mapUrlObjToStrObj(ApiModel);
-   

@@ -71,14 +71,13 @@ import {keys} from 'lodash'
 import http from '@/utils/http'
 import {Api,ApiModel} from './url';
 
-
 function mapUrlObjToFuncObj(apiModel:Api){
   const API: {
-    [propName:string]:Function
+    [propName:string]:(params?:Params)=>any
   } = {};
   keys(apiModel).forEach((key:string)=>{
     const item = apiModel[key]
-    API[key]=function(params:any){
+    API[key]=function(params:Params){
       return http[item.method](item.url,params)
     }
   });
@@ -98,8 +97,6 @@ function mapUrlObjToStrObj(apiModel:Api){
 
 export const API = mapUrlObjToFuncObj(ApiModel);
 export const URL = mapUrlObjToStrObj(ApiModel);
-   
-   
 ```
 这里我们用来放置api的接口地址，为了后续的接口维护，我们在使用的过程中不会直接写死接口地址，而是将接口请求封装成一个个方法。通过对接口的统一维护，我们就可以做到在执行修改接口地址、修改请求方法、新增接口等等操作时，就不用在整个项目里到处找了，只要维护好url.ts向外暴露的对象即可。使用方法如下：
 ```
@@ -264,7 +261,7 @@ export default store;
 import * as actionTypes from './actionTypes';
 import API from '../api';
 
-export const fecthUserName=(params)=> async (dispatch:Dispatch,getState:Function)=>{
+export const fecthUserName=(params?:Params)=> async (dispatch:Dispatch,getState:()=>State)=>{
   const response =await API.fetchUserInfo(params);
   const {success,data} = response;
   if(success){
@@ -280,7 +277,7 @@ export const fecthUserName=(params)=> async (dispatch:Dispatch,getState:Function
 import * as actionTypes from './actionTypes';
 import { Dispatch } from 'redux';
 
-export const fecthUserName=(params?:any)=> async (dispatch:Dispatch,getState:Function,{API}:any)=>{
+export const fecthUserName=(params?:Params)=> async (dispatch:Dispatch,getState:()=>State,{API}:any)=>{
   const response =await API.fetchUserInfo(params);
   const {success,data} = response;
   if(success){
