@@ -45,10 +45,8 @@ const initialState:TeachersState = {
   teacherList:[]
 }
 
-@connect(
-  (state:State) => ({ user:state.user }),
-)
-export default class Teachers extends React.PureComponent<TeachersProps,TeachersState> {
+
+class Teachers extends React.PureComponent<TeachersProps,TeachersState> {
   readonly state = initialState
   componentDidMount() {
     this.loadMainData(true);
@@ -149,9 +147,13 @@ export default class Teachers extends React.PureComponent<TeachersProps,Teachers
     return (
       <div className="page-pageTwo" >
           <div className="user">Hello,{username}</div>
-          <Filter onSearch={this.handleSearch}/>     
+          <Filter onSearch={this.handleSearch}/>
           <Table style={{marginTop:20}} rowKey={(row:TeacherItem):string=>row.id+''} columns={columns} dataSource={teacherList} pagination={{current:pageNo,pageSize:(pageSize as number),onChange:this.handlePageChange}}/>  
       </div>
     )
   }
 }
+
+export default connect(
+  (state:State) => ({ user:state.user }),
+)(Teachers);

@@ -1,14 +1,15 @@
-import React, { ReactElement,ComponentClass,ComponentType} from 'react';
+import React, { ReactElement,ComponentClass,ComponentType,LazyExoticComponent,Suspense} from 'react';
 import {Router} from 'react-router-dom';
 import {Switch, Route ,Redirect} from 'react-router';
 import {history,routes} from '@/router';
+import Loading from '@/components/Loading';
 
 interface RouteItem {
   path:string,
   redirect?:string,
   children?:RouteItem[],
   layout?:ComponentClass,
-  component?:ComponentType
+  component?:ComponentType | LazyExoticComponent<ComponentType>
 }
 
 function getRouterByRoutes(routes:RouteItem[]){
@@ -21,32 +22,33 @@ function getRouterByRoutes(routes:RouteItem[]){
       }
       if(component){
         renderedRoutesList.push(
-          layout?<Route 
-            key={`${parentPath}${path}`} 
+          layout?<Route
+            key={`${parentPath}${path}`}
             exact path={`${parentPath}${path}`}
             render={(props:any)=>React.createElement(layout,props,React.createElement(component,props))} />:
-          <Route 
-              key={`${parentPath}${path}`} 
-              exact 
-              path={`${parentPath}${path}`} 
+          <Route
+              key={`${parentPath}${path}`}
+              exact
+              path={`${parentPath}${path}`}
               component={component}/>)
       }
       if(Array.isArray(children)&&children.length>0){
         renderRoutes(children,path)
       }
     });
-  }  
+  }
   renderRoutes(routes,'')
   return renderedRoutesList;
- 
 }
 class App extends React.PureComponent{
   render(){
     return (
       <Router history={history}>
-        <Switch>
-          {getRouterByRoutes(routes)}
-        </Switch>
+        <Suspense fallback={<Loading/>}>
+          <Switch>
+            {getRouterByRoutes(routes)}
+          </Switch>
+        </Suspense>
       </Router>
     )
   }

@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import * as actions from './redux/actions'; 
+import * as actions from './redux/actions';
 import './style.scss';
 import {Icon} from 'antd';
 
@@ -9,10 +9,6 @@ interface HomeProps{
   author:Author,
   fetchAuthorData():any
 }
-@connect(
-  (state:State)=>({user:state.user,author:state.author}),
-  dispatch=>bindActionCreators(actions,dispatch)
-)
 class Home extends React.PureComponent<HomeProps>{
   componentDidMount(){
     const {fetchAuthorData} = this.props;
@@ -39,4 +35,7 @@ class Home extends React.PureComponent<HomeProps>{
       </div>)
   }
 }
-export default Home;
+export default connect(
+  (state:State)=>({user:state.user,author:state.author}),
+  dispatch=>bindActionCreators(actions,dispatch)
+)(Home);
