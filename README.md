@@ -4,6 +4,8 @@
 ## 前言
 该项目已分不同方向去维护，每个分支与之对应的方向可在[CONTRIBUTING.md](https://github.com/ruichengping/react-webpack-pc/blob/master/CONTRIBUTING.md)里查看
 
+> 由于webpack4和babel7已经非常稳定了，因此webpack3_babel6已不再维护，请使用webpack4_babel7的版本
+
 ## 项目结构
 
 ![项目结构](https://user-gold-cdn.xitu.io/2018/8/17/16546fd9debd8473?w=546&h=654&f=jpeg&s=44641)
