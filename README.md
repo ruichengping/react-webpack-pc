@@ -40,7 +40,7 @@ package.json我配置一个script，如下：
 控制台执行“npm run mock“即可。
 
 ## src
-### api 
+### api
 **url.js**
 ```
 export default {
@@ -86,7 +86,6 @@ function mapUrlObjToStrObj(urlObj){
 
 export const API = mapUrlObjToFuncObj(API_URL);
 export const URL = mapUrlObjToStrObj(API_URL);
-   
 ```
 这里我们用来放置api的接口地址，为了后续的接口维护，我们在使用的过程中不会直接写死接口地址，而是将接口请求封装成一个个方法。通过对接口的统一维护，我们就可以做到在执行修改接口地址、修改请求方法、新增接口等等操作时，就不用在整个项目里到处找了，只要维护好url.js向外暴露的对象即可。使用方法如下：
 ```
@@ -166,7 +165,7 @@ export default BasicLayout;
     <div>隔壁老王今日行程：</div>
     <div>
         <div>今天隔壁老王比较累，不工作！</div>
-    </div> 
+    </div>
 </div>
 ```
 这样我们可以基于BasicLayout做出很多个像下面的页面。
@@ -175,7 +174,7 @@ export default BasicLayout;
     <div>隔壁老王今日行程：</div>
     <div>
        //<不同的内容>
-    </div> 
+    </div>
 </div>
 ```
 使用这种方法就可以将我们得所有路由写在一起了，可能有人觉得每次都要写引入BasicLayout很麻烦，有没有其他更好用的办法，在讲App.js的时候会说到这里就先跳过。
@@ -253,16 +252,15 @@ export const fecthUserName=(params)=> async (dispatch,getState,{API})=>{
 ### router/index.js
 这里以配置化的防止去注册路由，并app.js里面去渲染路由标签。
 ```
-import Loadable from 'react-loadable';
+import {lazy} from 'react';
 import createHistory from 'history/createBrowserHistory';
 import BasicLayout from '@/layouts/BasicLayout';
 import NavTwoLayout from '@/layouts/NavTwoLayout';
-import Loading from '@/components/Loading';
 import NotFound from '@/pages/Exception/404';
 
 
-const Home = Loadable({loader: () => import('@/pages/Home'),loading: Loading});
-const Teachers = Loadable({loader: () => import('@/pages/Teachers'),loading: Loading});
+const Home = lazy(() => import('@/pages/Home'));
+const Teachers = lazy(() => import('@/pages/Teachers'));
 
 export const history = createHistory();
 
@@ -298,10 +296,11 @@ export const routes = [
 ### App.js
 这里根据路由配置用来渲染路由标签，先放代码：
 ```
-import React from 'react';
+import React,{Suspense} from 'react';
 import {Router} from 'react-router-dom';
 import {Switch, Route ,Redirect} from 'react-router';
 import {history,routes} from '@/router';
+import Loading from '@/components/Loading';
 
 
 
@@ -315,32 +314,33 @@ function getRouterByRoutes(routes){
       }
       if(component){
         renderedRoutesList.push(
-          layout?<Route 
-            key={`${parentPath}${path}`} 
+          layout?<Route
+            key={`${parentPath}${path}`}
             exact path={`${parentPath}${path}`}
             render={(props)=>React.createElement(layout,props,React.createElement(component,props))} />:
-          <Route 
-              key={`${parentPath}${path}`} 
-              exact 
-              path={`${parentPath}${path}`} 
+          <Route
+              key={`${parentPath}${path}`}
+              exact
+              path={`${parentPath}${path}`}
               component={component}/>)
       }
       if(Array.isArray(children)&&children.length>0){
         renderRoutes(children,path)
       }
     });
-  }  
+  }
   renderRoutes(routes,'')
   return renderedRoutesList;
- 
 }
 class App extends React.PureComponent{
   render(){
     return (
       <Router history={history}>
-        <Switch>
-          {getRouterByRoutes(routes)}
-        </Switch>
+        <Suspense fallback={<Loading/>}>
+          <Switch>
+            {getRouterByRoutes(routes)}
+          </Switch>
+        </Suspense>
       </Router>
     )
   }
@@ -378,7 +378,7 @@ render(
 
 这里存放着页面和组件级别构建所需要的模板文件，页面级别构建提供了两种模板PageReducer（集成了reducer）和PageSample（不集成reducer），而组件只提供了一种模板ComSample。页面和组件级别的构建是需要配合asuna-cli才能构建，目前项目已经集成了asuna-cli。package.json写了两个script：npm run newPage（页面构建）和npm run newComponent（组件构建）。开发可根据实际需要选择构建，asuna-cli具体使用可以去[asuna-cli](https://github.com/ruichengping/asuna-cli)查看。
 
-## 其他文件 
+## 其他文件
 - .babelrc ---- babel转换的配置文件
 - .gitignore ---- git操作所需要忽略的文件
 - .postcssrc.js ---- postcss的配置文件
