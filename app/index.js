@@ -17,11 +17,13 @@ app.use('/api',function(req,res,next){
     target:config.server.proxy.target,
     changeOrigin: true })(req,res,next);
 })
-app.get('*',(req,res)=>{
-  console.log(req.url);
-  render(req,res);
+app.get('*',(req,res,next)=>{
+  render(req,res,next);
 });
-
+app.use((err,req,res)=>{
+  console.error(err.message);
+  res.status(500).send(err);
+})
 app.listen(config.server.port,()=>{
   if(process.env.NODE_ENV === 'production') console.log(chalk.green(`Your application is running here: http://${utils.getLocalIPAdress()}:${config.server.port}`)) 
 });

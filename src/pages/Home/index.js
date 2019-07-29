@@ -1,8 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import classnames from 'classnames';
+import {isUndefined,isEmpty} from 'lodash';
 import {bindActionCreators} from 'redux';
 import withStyles from 'isomorphic-style-loader/withStyles';
+import {API} from '@/api';
 import * as actions from './redux/actions';
 
 import styles from './style.scss';
@@ -12,10 +14,21 @@ import {Icon} from 'antd';
   dispatch=>bindActionCreators(actions,dispatch)
 )
 class Home extends React.PureComponent{
-  constructor(props){
-    super(props);
-    const {fetchAuthorData} = props;
-    fetchAuthorData();
+  static loadData = (store,{baseURL})=>{
+    console.log(baseURL)
+    return API.fetchAuthorInfo({},{
+      baseURL
+    }).then((response)=>{
+      const {success,data} = response;
+      if(success){
+        actions.changeAuthorInfo(store.dispatch,data);
+      }
+    });
+  }
+  componentDidMount(){
+    const {staticContext,fetchAuthorData,author} = this.props;
+    const {info} = author; 
+    if(isUndefined(staticContext)&&isEmpty(info)) fetchAuthorData();
   }
   render(){
     const {author} = this.props;

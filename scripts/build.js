@@ -11,11 +11,11 @@ const webpack = require('webpack')
 const config = require('config')
 const clientWebpackConfig = require('../build/webpack.client.conf')
 const serverWebpackConfig = require('../build/webpack.server.conf')
-const promises = []
 const spinner = ora('building for production...')
 spinner.start()
 rm(config.assetsRoot, err => {
   if (err) throw err
+  const promises = []
   //client webpack
   promises.push(new Promise((resolve,reject)=>{
     webpack(clientWebpackConfig, (err, stats) => {

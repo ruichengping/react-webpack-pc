@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import {Table,Modal,message as Message} from "antd";
+import {Helmet} from "react-helmet";
 import withStyles from 'isomorphic-style-loader/withStyles';
 import {API} from '@/api';
 import Filter from './components/Filter';
@@ -128,6 +129,11 @@ class Teachers extends React.PureComponent {
     ]
     return (
       <div className={styles.pageTwo} >
+          <Helmet>
+            <title>用户页</title>
+            <meta name="keywords" content="user" />
+            <meta name="description" content={teacherList.map(teacher=>teacher.name).join('，')} />
+          </Helmet>
           <div className={styles.user}>Hello,{username}</div>
           <Filter onSearch={this.handleSearch}/>
           <Table style={{marginTop:20}} rowKey={row=>row.id} columns={columns} dataSource={teacherList} pagination={{current:pageNo,pageSize,onChange:this.handlePageChange}}/>  

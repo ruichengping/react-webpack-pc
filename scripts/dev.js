@@ -12,12 +12,12 @@ const serverWebpackConfig = require('../build/webpack.server.conf');
 
 const clientCompiler = webpack(clientWebpackConfig);
 const serverCompiler = webpack(serverWebpackConfig);
-const promises = [];
 const clientBuildSpinner = ora('client webpack building ...')
 const serverBuildSpinner = ora('server webpack building ...')
 rm(config.assetsRoot,(err)=>{
   if (err) throw err;
   //client webpack
+  const promises = [];
   promises.push(new Promise((resolve,reject)=>{
     clientBuildSpinner.start();
     clientCompiler.watch({
