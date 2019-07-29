@@ -1,15 +1,12 @@
 import '@babel/polyfill';
 import React from 'react';
-import {render} from 'react-dom';
-import {Provider} from 'react-redux';
-import store from '@/store';
+import {hydrate,render} from 'react-dom';
 import App from './App';
-import '@/scss/reset.scss';
-import '@/scss/base.scss';
 
-render(
-  <Provider store={store}>
-    <App/>
-  </Provider>,
+import '@/styles/css/reset.css';
+import '@/styles/css/base.css';
+const renderMethod = module.hot?render:hydrate;
+renderMethod(
+  <App/>,
   document.getElementById('app')
 )

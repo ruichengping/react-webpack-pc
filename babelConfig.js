@@ -1,5 +1,5 @@
-{
-  "presets": [
+module.exports = (type)=>{
+  const presets =  [
     ["@babel/preset-env", {
       "modules": false,
       "targets": {
@@ -8,8 +8,8 @@
       "useBuiltIns": "entry"
     }],
     "@babel/preset-react"
-  ],
-  "plugins": [
+  ]
+  const plugins = [
     "@babel/plugin-transform-runtime",
     // Stage 2
     ["@babel/plugin-proposal-decorators", { "legacy": true }],
@@ -22,6 +22,12 @@
     "@babel/plugin-syntax-import-meta",
     ["@babel/plugin-proposal-class-properties", { "loose": false }],
     "@babel/plugin-proposal-json-strings",
-    ["import", { "libraryName": "antd", "libraryDirectory": "es", "style":true }] 
-  ]
+  ];
+  if(type==='client'){
+    plugins.push(["import", { "libraryName": "antd", "libraryDirectory": "es", "style":true }])
+  }
+  return {
+    presets,
+    plugins
+  }
 }

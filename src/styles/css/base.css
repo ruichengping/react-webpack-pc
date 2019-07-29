@@ -1,11 +1,11 @@
-//水平对齐
+/* 水平对齐 */
 .text-right{
   text-align: right
 }
 .text-center{
   text-align: center;
 }
-//外边距-向上
+/* 外边距-向上 */
 .mt-10{
   margin-top: 10px;
 }
@@ -15,7 +15,7 @@
 .mt-30{
   margin-top: 20px;
 }
-//外边距-向右
+/* 外边距-向右 */
 .mr-10{
   margin-right: 10px;
 }
@@ -25,7 +25,7 @@
 .mr-30{
   margin-right: 30px;
 }
-//外边距-向下
+/* 外边距-向下 */
 .mb-10{
   margin-bottom: 10px;
 }
@@ -35,7 +35,7 @@
 .mb-30{
   margin-bottom: 30px;
 }
-//外边距-向左
+/* 外边距-向左 */
 .ml-10{
   margin-left: 10px;
 }

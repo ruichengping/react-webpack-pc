@@ -1,9 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import {Table,Modal,message as Message} from "antd";
+import withStyles from 'isomorphic-style-loader/withStyles';
 import {API} from '@/api';
 import Filter from './components/Filter';
-import "./style.scss";
+import styles from "./style.scss";
 
 export const sexs = [
   {
@@ -23,7 +24,7 @@ const sexMapper = (sex)=>{
 @connect(
   state => ({ user:state.user }),
 )
-export default class Teachers extends React.PureComponent {
+class Teachers extends React.PureComponent {
   state={
     pageNo:1,
     pageSize:20,
@@ -126,11 +127,13 @@ export default class Teachers extends React.PureComponent {
       }
     ]
     return (
-      <div className="page-pageTwo" >
-          <div className="user">Hello,{username}</div>
-          <Filter onSearch={this.handleSearch}/>     
+      <div className={styles["page-pageTwo"]} >
+          <div className={styles["user"]}>Hello1,{username}</div>
+          <Filter onSearch={this.handleSearch}/>
           <Table style={{marginTop:20}} rowKey={row=>row.id} columns={columns} dataSource={teacherList} pagination={{current:pageNo,pageSize,onChange:this.handlePageChange}}/>  
       </div>
     )
   }
 }
+
+export default withStyles(styles)(Teachers);

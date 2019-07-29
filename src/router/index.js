@@ -1,41 +1,57 @@
-import Loadable from 'react-loadable';
-import createHistory from 'history/createBrowserHistory';
-import BasicLayout from '@/layouts/BasicLayout';
-import NavTwoLayout from '@/layouts/NavTwoLayout';
+import React,{Suspense} from 'react';
+import {StaticRouter,Router,Switch,Route,Redirect} from 'react-router';
+import {createBrowserHistory} from 'history';
 import Loading from '@/components/Loading';
-import NotFound from '@/pages/Exception/404';
-
-
-const Home = Loadable({loader: () => import('@/pages/Home'),loading: Loading});
-const Teachers = Loadable({loader: () => import('@/pages/Teachers'),loading: Loading});
-
-export const history = createHistory();
-
-export const routes = [
-  {
-    path:'/',
-    redirect:'/navone/home'
-  },
-  {
-    path:'/navone',
-    redirect:'/navone/home',
-    children:[{
-      path:'/home',
-      layout:BasicLayout,
-      component:Home
-    }]
-  },
-  {
-    path:'/navtwo',
-    redirect:'/navtwo/teachers',
-    children:[{
-      path:'/teachers',
-      layout:NavTwoLayout,
-      component:Teachers
-    }]
-  },
-  {
-    path:'*',
-    component:NotFound
+import routes from './routes';
+function getRouterByRoutes(routes){
+  const renderedRoutesList = [];
+  const renderRoutes = (routes,parentPath)=>{
+    Array.isArray(routes)&&routes.forEach((route)=>{
+      const {path,redirect,children,layout,exact=true,component,render} = route;
+      if(redirect){
+        renderedRoutesList.push(<Redirect key={`${parentPath}${path}`} exact={exact} from={path} to={`${parentPath}${redirect}`}/>)
+      }
+      if(component){
+        renderedRoutesList.push(
+          layout?<Route
+            key={`${parentPath}${path}`}
+            exact={exact}
+            path={`${parentPath}${path}`}
+            render={(props)=>React.createElement(layout,props,React.createElement(component,props))} />:
+          <Route
+              key={`${parentPath}${path}`}
+              exact={exact}
+              path={`${parentPath}${path}`}
+              component={component}/>)
+      }
+      if(render){
+        renderedRoutesList.push(<Route
+          key={`${parentPath}${path}`}
+          exact={exact}
+          path={`${parentPath}${path}`}
+          render={render}/>)
+      }
+      if(Array.isArray(children)&&children.length>0){
+        renderRoutes(children,path)
+      }
+    });
   }
-]
+  renderRoutes(routes,'')
+  return renderedRoutesList;
+}
+export default (type)=>(params)=>{
+  if(type==='client'){
+    const history = createBrowserHistory();
+    return <Router history={history}>
+    <Switch>
+      {getRouterByRoutes(routes)}
+    </Switch>
+  </Router>
+  }else if(type==='server'){
+    return <StaticRouter {...params}>
+       <Switch>
+        {getRouterByRoutes(routes)}
+      </Switch>
+    </StaticRouter>
+  }
+}

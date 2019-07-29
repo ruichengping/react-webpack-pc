@@ -1,23 +1,41 @@
 'use strict'
 const path = require('path')
-const config = require('../config')
+const os = require('os')
+const config = require('config')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const packageConfig = require('../package.json')
 const theme=require('../theme')
 
 const devMode = process.env.NODE_ENV !== 'production'
 
+exports.getLocalIPAdress = function (){
+  const interfaces = os.networkInterfaces();
+  let localIpAdress = '';
+  Object.keys(interfaces).forEach((devName)=>{
+    const iface = interfaces[devName];
+    iface.forEach((alias)=>{
+      if(alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal){
+        localIpAdress = alias.address;
+      }
+    });
+  })
+  return localIpAdress;
+}
 exports.assetsPath = function (_path) {
-  const assetsSubDirectory = process.env.NODE_ENV === 'production'
-    ? config.build.assetsSubDirectory
-    : config.dev.assetsSubDirectory
-
-  return path.posix.join(assetsSubDirectory, _path)
+  return path.posix.join(config.client.assetsSubDirectory, _path)
 }
 
 exports.cssLoaders = function (options) {
   options = options || {}
 
+  const cssModuleLoader = {
+    loader: 'css-loader',
+    options: {
+      importLoaders: 1,
+      modules:true,
+      sourceMap: options.sourceMap
+    }
+  }
   const cssLoader = {
     loader: 'css-loader',
     options: {
@@ -33,13 +51,24 @@ exports.cssLoaders = function (options) {
   }
 
   const styleLoader={
-    loader:devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+    loader:devMode ? 'style-loader' : MiniCssExtractPlugin.loader
+  }
+  const isomorphicStyleLoader = {
+    loader:devMode ? 'isomorphic-style-loader' : MiniCssExtractPlugin.loader
   }
   // generate loader string to be used with extract text plugin
   function generateLoaders (loader, loaderOptions) {
-    const loaders = options.usePostCSS ? [styleLoader,cssLoader, postcssLoader] : [styleLoader,cssLoader]
+    const loaderMapToPreLoaders = {
+      css:[styleLoader,cssLoader],
+      sass:[isomorphicStyleLoader,cssModuleLoader],
+      less:[styleLoader,cssLoader]
+    }
 
-    if (loader) {
+    const loaders = loaderMapToPreLoaders[loader]
+    if(options.usePostCSS){
+      loaders.push(postcssLoader)
+    }
+    if (loader!=='css') {
       loaders.push({
         loader: loader + '-loader',
         options: Object.assign({}, loaderOptions, {
@@ -50,16 +79,13 @@ exports.cssLoaders = function (options) {
 
     return loaders;
   }
-
-  // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {
-    css: generateLoaders(),
+    css: generateLoaders('css'),
     less: generateLoaders('less',{modifyVars:theme}),
     scss: generateLoaders('sass')
   }
 }
 
-// Generate loaders for standalone style files (outside of .vue)
 exports.styleLoaders = function (options) {
   const output = []
   const loaders = exports.cssLoaders(options)

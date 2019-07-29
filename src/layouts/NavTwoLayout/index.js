@@ -1,8 +1,9 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import {Menu,Icon} from 'antd';
+import withStyles from 'isomorphic-style-loader/withStyles';
 import BasicLayout from '../BasicLayout';
-import {Menu,Icon} from 'antd'
-import './style.scss';
+import styles from './style.scss';
 const SubMenu = Menu.SubMenu;
 const navMenuList = [{
   title:'老师列表',
@@ -34,7 +35,7 @@ class NavTwoLayout extends React.PureComponent{
         return <Menu.Item key={path}><Link to={path}><Icon type={icon} /> {title}</Link></Menu.Item>
       }
     })
-  } 
+  }
   getOpenKeyAndSelectedKey(navMenuList,matchedPath){
     const openKeys=[],selectedKeys=[];
     Array.isArray(navMenuList)&&navMenuList.forEach((navMenu)=>{
@@ -59,10 +60,10 @@ class NavTwoLayout extends React.PureComponent{
     const {pathname} = location;
     const {openKeys,selectedKeys} = this.getOpenKeyAndSelectedKey(navMenuList,pathname);
     return (
-      <BasicLayout className="g-navtwo">
-        <div className="g-slider">
-          <Menu 
-            className="m-menu"
+      <BasicLayout className={styles["g-navtwo"]}>
+        <div className={styles["g-slider"]}>
+          <Menu
+            className={styles["m-menu"]}
             mode="inline"
             openKeys={openKeys}
             selectedKeys={selectedKeys}
@@ -72,9 +73,9 @@ class NavTwoLayout extends React.PureComponent{
             }
           </Menu>
         </div>
-        <div className="g-main">{children}</div>
+        <div className={styles["g-main"]}>{children}</div>
       </BasicLayout>
     )
   }
 }
-export default NavTwoLayout;
+export default withStyles(styles)(NavTwoLayout);

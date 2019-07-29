@@ -1,13 +1,15 @@
 import React from 'react';
 import {Layout,Menu,Popover,Avatar,Icon} from 'antd';
+import classnames  from 'classnames';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types'
 import {withRouter} from 'react-router';
+import withStyles from 'isomorphic-style-loader/withStyles';
 import * as globalActions from '../../store/actions';
 const { Header, Content} = Layout;
-import './style.scss';
+import styles from './style.scss';
 @connect(
   state=>({user:state.user}),
   dispatch=>bindActionCreators(globalActions,dispatch)
@@ -36,18 +38,18 @@ class BasicLayout extends React.PureComponent{
     const {user,children,className} = this.props;
     const {username} = user;
     const content=(
-      <ul className="m-user-operation-list">
-        <li className="operation-item" key="1"><Link to="/user/center">用户信息</Link></li>
-        <li className="operation-item" key="2"><a href="javascript:;">退出登录</a></li>
+      <ul className={styles["m-user-operation-list"]}>
+        <li className={styles["operation-item"]} key="1"><Link to="/user/center">用户信息</Link></li>
+        <li className={styles["operation-item"]} key="2"><a href="javascript:;">退出登录</a></li>
       </ul>
     )
     return (
-      <Layout className="g-container">
-        <Header className="g-header">
-            <div className="m-left"><span className="u-title">样本系统</span></div>
-            <div className="m-middle">
+      <Layout className={styles["g-container"]}>
+        <Header className={styles["g-header"]}>
+            <div className={styles["m-left"]}><span className={styles["u-title"]}>样本系统</span></div>
+            <div className={styles["m-middle"]}>
               <Menu
-                className="m-slider"
+                className={styles["m-slider"]}
                 theme="dark"
                 mode="horizontal"
                 selectedKeys={menuSelectedKeys}
@@ -57,18 +59,18 @@ class BasicLayout extends React.PureComponent{
                 <Menu.Item key="/navtwo"><Icon type="appstore" /> 导航2</Menu.Item>
               </Menu>
             </div>
-            <div className="m-right text-right">
+            <div className={classnames(styles["m-right"],"text-right")}>
               <Popover placement="bottom" content={content}>
                 <Avatar icon="user" />
-                <span className="u-user-name ml-10">{username}</span>
+                <span className={classnames(styles["u-user-name"],"ml-10")}>{username}</span>
               </Popover>
             </div>
         </Header>
-        <Content className={`g-body ${className}`}>
+        <Content className={classnames(styles['g-body'],className)}>
           {children}
         </Content>
       </Layout>
     )
   }
 }
-export default withRouter(BasicLayout) ;
+export default withStyles(styles)(withRouter(BasicLayout));

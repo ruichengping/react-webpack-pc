@@ -9,10 +9,11 @@ const rootReducer = combineReducers({
   author
 })
 
-const store=createStore(
-  rootReducer,
-  applyMiddleware(thunk.withExtraArgument({
-    API
-  }))
-)
-export default store;
+export default (initialState) => {
+  return createStore(
+    rootReducer,
+    initialState,
+    applyMiddleware(thunk.withExtraArgument({
+      API
+    })))
+};

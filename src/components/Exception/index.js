@@ -1,8 +1,9 @@
 import React, { createElement } from 'react';
-import classNames from 'classnames';
+import classnames from 'classnames';
+import withStyles from 'isomorphic-style-loader/withStyles';
 import { Button } from 'antd';
 import config from './typeConfig';
-import './style.scss';
+import styles from './style.scss';
 
 class Exception extends React.PureComponent {
   static defaultProps = {
@@ -29,19 +30,19 @@ class Exception extends React.PureComponent {
       ...rest
     } = this.props;
     const pageType = type in config ? type : '404';
-    const clsString = classNames("component-exception", className);
+    const clsString = classnames(styles["component-exception"], className);
     return (
       <div className={clsString} {...rest}>
-        <div className="imgBlock">
+        <div className={styles.imgBlock}>
           <div
-            className="imgEle"
+            className={styles.imgEle}
             style={{ backgroundImage: `url(${img || config[pageType].img})` }}
           />
         </div>
-        <div className="content">
+        <div className={styles.content}>
           <h1>{title || config[pageType].title}</h1>
-          <div className="desc">{desc || config[pageType].desc}</div>
-          <div className="actions">
+          <div className={styles.desc}>{desc || config[pageType].desc}</div>
+          <div className={styles.actions}>
             {actions ||
               createElement(
                 linkElement,
@@ -58,4 +59,4 @@ class Exception extends React.PureComponent {
   }
 }
 
-export default Exception;
+export default withStyles(styles)(Exception);
