@@ -1,10 +1,12 @@
-.m-info-wrapper{
-  display: flex;
-  justify-content: center;
-  .m-info{
-    width: 450px;
-    .u-info-item{
-      margin-top: 10px;
+.pageOne{
+  .infoWrapper{
+    display: flex;
+    justify-content: center;
+    .info{
+      width: 450px;
+      .infoItem{
+        margin-top: 10px;
+      }
     }
   }
 }

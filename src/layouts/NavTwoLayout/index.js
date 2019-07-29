@@ -60,10 +60,10 @@ class NavTwoLayout extends React.PureComponent{
     const {pathname} = location;
     const {openKeys,selectedKeys} = this.getOpenKeyAndSelectedKey(navMenuList,pathname);
     return (
-      <BasicLayout className={styles["g-navtwo"]}>
-        <div className={styles["g-slider"]}>
+      <BasicLayout className={styles.navtwo}>
+        <div className={styles.slider}>
           <Menu
-            className={styles["m-menu"]}
+            className={styles.menu}
             mode="inline"
             openKeys={openKeys}
             selectedKeys={selectedKeys}
@@ -73,7 +73,7 @@ class NavTwoLayout extends React.PureComponent{
             }
           </Menu>
         </div>
-        <div className={styles["g-main"]}>{children}</div>
+        <div className={styles.main}>{children}</div>
       </BasicLayout>
     )
   }

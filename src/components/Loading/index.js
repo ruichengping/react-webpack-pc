@@ -1,15 +1,16 @@
 import React from 'react';
 import withStyles from 'isomorphic-style-loader/withStyles';
 import styles from './style.scss';
-
-export default withStyles(styles)(()=>{
+const Loading = (props)=>{
+  const {loading=true,children} = props;
   return (
-    <div className={styles["comp-loading"]}>
-      <div className={styles["item-1"]}></div>
-      <div className={styles["item-2"]}></div>
-      <div className={styles["item-3"]}></div>
-      <div className={styles["item-4"]}></div>
-      <div className={styles["item-5"]}></div>
-    </div>
+    loading?<div className={styles.compLoading}>
+      <div className={styles.item1}></div>
+      <div className={styles.item2}></div>
+      <div className={styles.item3}></div>
+      <div className={styles.item4}></div>
+      <div className={styles.item5}></div>
+    </div>:children
   )
-})
+}
+export default withStyles(styles)(Loading)

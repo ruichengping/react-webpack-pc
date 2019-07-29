@@ -127,8 +127,8 @@ class Teachers extends React.PureComponent {
       }
     ]
     return (
-      <div className={styles["page-pageTwo"]} >
-          <div className={styles["user"]}>Hello1,{username}</div>
+      <div className={styles.pageTwo} >
+          <div className={styles.user}>Hello,{username}</div>
           <Filter onSearch={this.handleSearch}/>
           <Table style={{marginTop:20}} rowKey={row=>row.id} columns={columns} dataSource={teacherList} pagination={{current:pageNo,pageSize,onChange:this.handlePageChange}}/>  
       </div>

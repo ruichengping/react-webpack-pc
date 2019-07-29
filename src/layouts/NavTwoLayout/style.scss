@@ -1,15 +1,15 @@
 
-.g-navtwo{
+.navtwo{
   display: flex;
   height: 100%;
-  .g-slider{
+  .slider{
     width: 200px;
     height: 100%;
-    .m-menu{
+    .menu{
       height: 100%;
     }
   }
-  .g-main{
+  .main{
     flex: 1;
     height: 100%;
     overflow: auto;

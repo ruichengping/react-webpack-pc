@@ -30,7 +30,7 @@ class Exception extends React.PureComponent {
       ...rest
     } = this.props;
     const pageType = type in config ? type : '404';
-    const clsString = classnames(styles["component-exception"], className);
+    const clsString = classnames(styles.componentException , className);
     return (
       <div className={clsString} {...rest}>
         <div className={styles.imgBlock}>

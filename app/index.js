@@ -1,5 +1,7 @@
 import express from 'express';
 import config from 'config';
+import chalk from 'chalk';
+import utils from '../build/utils';
 import proxy from 'http-proxy-middleware';
 import hbs from 'hbs';
 import render from './render';
@@ -20,4 +22,6 @@ app.get('*',(req,res)=>{
   render(req,res);
 });
 
-app.listen(config.server.port);
+app.listen(config.server.port,()=>{
+  if(process.env.NODE_ENV === 'production') console.log(chalk.green(`Your application is running here: http://${utils.getLocalIPAdress()}:${config.server.port}`)) 
+});

@@ -1,14 +1,16 @@
 import React from 'react';
-import { lazy } from '@loadable/component';
+import loadable from '@loadable/component';
 import BasicLayout from '@/layouts/BasicLayout';
 import NavTwoLayout from '@/layouts/NavTwoLayout';
 import NotFound from '@/pages/Exception/404';
+import Loading from '@/components/Loading';
 
 
-// const Home = lazy(() => import('@/pages/Home'));
-import Home from '@/pages/Home';
-// const Teachers = lazy(() => import('@/pages/Teachers'));
-import Teachers from '@/pages/Teachers';
+
+const Home = loadable (() => import('@/pages/Home'),{fallback:Loading});
+// import Home from '@/pages/Home';
+const Teachers = loadable (() => import('@/pages/Teachers'),{fallback:Loading});
+// import Teachers from '@/pages/Teachers';
 
 
 export default [

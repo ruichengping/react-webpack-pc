@@ -1,43 +1,44 @@
-.g-container{
+.container{
   height: 100%;
-  .g-header{
+  .header{
     position: fixed;
     top:0;
     left: 0;
     width: 100%;
     display: flex;
     padding: 0;
-    .m-left{
+    .left{
       flex:0 0 200px;
       text-align: center;
-      .u-title{
+      .title{
         color: #fff;
         font-size: 18px;
       }
     }
-    .m-middle{
+    .middle{
       flex: 1;
-      .m-slider{
+      .slider{
         line-height: 64px;
       }
     }
-    .m-right{
-      .u-user-name{
+    .right{
+      .userName{
         color: #fff;
         font-size: 16px;
         padding-right: 20px;
+        cursor: pointer;
       }
     }
   }
-  .g-body{
+  .body{
     box-sizing: border-box;
     padding-top: 64px;
     height: 100%;
     overflow: auto;
   }
 }
-.m-user-operation-list{
-  .operation-item{
+.userOperationList{
+  .operationItem{
     padding: 10px;
     a:link{
       color: #000;

@@ -38,18 +38,18 @@ class BasicLayout extends React.PureComponent{
     const {user,children,className} = this.props;
     const {username} = user;
     const content=(
-      <ul className={styles["m-user-operation-list"]}>
-        <li className={styles["operation-item"]} key="1"><Link to="/user/center">用户信息</Link></li>
-        <li className={styles["operation-item"]} key="2"><a href="javascript:;">退出登录</a></li>
+      <ul className={styles.userOperationList}>
+        <li className={styles.operationItem} key="1"><Link to="/user/center">用户信息</Link></li>
+        <li className={styles.operationItem} key="2"><a href="javascript:;">退出登录</a></li>
       </ul>
     )
     return (
-      <Layout className={styles["g-container"]}>
-        <Header className={styles["g-header"]}>
-            <div className={styles["m-left"]}><span className={styles["u-title"]}>样本系统</span></div>
-            <div className={styles["m-middle"]}>
+      <Layout className={styles.container}>
+        <Header className={styles.header}>
+            <div className={styles.left}><span className={styles.title}>样本系统</span></div>
+            <div className={styles.middle}>
               <Menu
-                className={styles["m-slider"]}
+                className={styles.slider}
                 theme="dark"
                 mode="horizontal"
                 selectedKeys={menuSelectedKeys}
@@ -59,14 +59,14 @@ class BasicLayout extends React.PureComponent{
                 <Menu.Item key="/navtwo"><Icon type="appstore" /> 导航2</Menu.Item>
               </Menu>
             </div>
-            <div className={classnames(styles["m-right"],"text-right")}>
+            <div className={classnames(styles.right,"text-right")}>
               <Popover placement="bottom" content={content}>
                 <Avatar icon="user" />
-                <span className={classnames(styles["u-user-name"],"ml-10")}>{username}</span>
+                <span className={classnames(styles.userName,"ml-10")}>{username}</span>
               </Popover>
             </div>
         </Header>
-        <Content className={classnames(styles['g-body'],className)}>
+        <Content className={classnames(styles.body,className)}>
           {children}
         </Content>
       </Layout>

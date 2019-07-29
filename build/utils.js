@@ -54,7 +54,7 @@ exports.cssLoaders = function (options) {
     loader:devMode ? 'style-loader' : MiniCssExtractPlugin.loader
   }
   const isomorphicStyleLoader = {
-    loader:devMode ? 'isomorphic-style-loader' : MiniCssExtractPlugin.loader
+    loader:'isomorphic-style-loader'
   }
   // generate loader string to be used with extract text plugin
   function generateLoaders (loader, loaderOptions) {
