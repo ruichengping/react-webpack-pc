@@ -1,7 +1,6 @@
-import React,{Suspense} from 'react';
+import React from 'react';
 import {StaticRouter,Router,Switch,Route,Redirect} from 'react-router';
 import {createBrowserHistory} from 'history';
-import Loading from '@/components/Loading';
 import getRoutes from './routes';
 function getRouterByRoutes(routes){
   const renderedRoutesList = [];

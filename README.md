@@ -1,31 +1,69 @@
 # react-webpack-pc
 这是一款基于webpack构建的react项目模板,可以使用我自己写的脚手架工具[asuna-cli](https://github.com/ruichengping/asuna-cli)进行构建。
 
-## 前言
+# 前言
 该项目已分不同方向去维护，每个分支与之对应的方向可在[CONTRIBUTING.md](https://github.com/ruichengping/react-webpack-pc/blob/master/CONTRIBUTING.md)里查看
+# 使用
+## 安装
+```
+yarn
+```
+## 启动
+### 开发环境
+```
+yarn dev
+```
+### 生产环境
+```
+//打包
+yarn build
 
-## 项目结构
 
-![项目结构](https://user-gold-cdn.xitu.io/2018/8/17/16546fd9debd8473?w=546&h=654&f=jpeg&s=44641)
-
-> 以上是示例项目的目录结构，下面我们将逐一进行分析**
+//启动node服务
+yarn start
+```
+# 项目结构
+## app
+这个文件夹放置node服务相关文件
+- index.js 服务启动文件
+- render.js react组件渲染函数
+- utils.js 工具方法
 ## build
 这个文件主要放了一些与webpack打包的相关文件。
-- **build.js** ---- webpack打包脚本，用于构建生产环境的包
 - **check-versions.js** ---- 主要检测当前打包环境的node以及npm的版本是否符合要求
 - **utils.js** ---- webpack打包所需要的一些工具库
 - **webpack.base.conf.js** ---- webpack的一些基础配置，不同环境的webpack配置都是基于此
-- **webpack.dev.conf.js** ---- 开发环境的webpack配置
-- **webpack.prod.conf.js** ---- 生产环境的webpack配置
+- **webpack.client.conf.js** ---- 客户端webpack配置
+- **webpack.server.conf.js** ---- 服务端webpack配置
 
-这个项目的webpack配置我是在vue-cli的项目上进行修改的，可以用于React的项目构建。目前只要开发环境和生产环境这两个环境，可能一些公司有多个环境，每个环境下webpack的配置还不同，此时可以根据不同环境建一个文件名格式为“**webpack.<环境名>.conf.js**”的webpack配置使用。**webpack.base.conf.js**里面有一些基本配置比如**rules**、**input**、**output**的等配置，一般来说每个环境下这些大致都是相同，一些不同之处可以用**webpack-merge**插件进行合并。一般来说大多数项目来说开发环境和生产环境两个webpack配置足够了。
+**webpack.base.conf.js**里面有一些基本配置比如**rules**、**input**、**output**的等配置，**webpack.client.conf.js**和**webpack.server.conf.js**是在此基础上**webpack-merge**合并而来。另外**webpack.client.conf.js**和**webpack.server.conf.js**都有做生产环境（production）和开发环境（development）的区分。
 ## config
 这里存放着不同环境webpack所需要的配置参数。
-- **dev.env.js** ---- 向外暴露开发环境下的环境变量**NODE_ENV**
-- **index.js** ---- 存放不同环境的配置参数
-- **prod.env.js** ---- 向外暴露生产环境下的环境变量**NODE_ENV**
+- **default.js** ---- 基础配置
+- **development.js** ---- 开发环境配置
+- **production.js** ---- 生产环境配置
 
-如果你需要再加一个环境的话，可以建一个文件名为“<环境名>.env.js”并向外暴露环境变量**NODE_ENV**，然后在index.js中导入，进行相关参数设置。
+开发环境的最终配置：**default.js** + **development.js**
+
+生产环境的最终配置：**default.js** + **production.js**
+
+如果有新的环境比如说是测试环境，可以直接在config目录下加一个test.js文件，该文件作为测试环境的配置文件
+
+用法：
+```
+//开发环境配置获取
+process.env.NODE_ENV = 'development'
+const config = require('config')
+
+
+//生产环境配置获取
+process.env.NODE_ENV = 'production'
+const config = require('config')
+
+//测试环境配置获取
+process.env.NODE_ENV = 'test'
+const config = require('config')
+```
 
 ## mock
 这里是用来做接口的mock的，可能很多公司都不太用，我在工作也很少去mock。这里介绍一下自己的接口mock思路，这里我选择**mockjs**加上**json-server**的组合。二者具体的使用，大家可以查看其官方文档。
@@ -38,9 +76,13 @@ package.json我配置一个script，如下：
  "mock": "json-server mock/index.js  --port 3000 --routes mock/routes.json"
 ```
 控制台执行“npm run mock“即可。
+## scripts
+这里放置一些脚本类文件
+- build.js 打包脚本
+- dev.js 启动开发环境脚本
 
 ## src
-### api 
+### api
 **url.js**
 ```
 export default {
@@ -86,7 +128,6 @@ function mapUrlObjToStrObj(urlObj){
 
 export const API = mapUrlObjToFuncObj(API_URL);
 export const URL = mapUrlObjToStrObj(API_URL);
-   
 ```
 这里我们用来放置api的接口地址，为了后续的接口维护，我们在使用的过程中不会直接写死接口地址，而是将接口请求封装成一个个方法。通过对接口的统一维护，我们就可以做到在执行修改接口地址、修改请求方法、新增接口等等操作时，就不用在整个项目里到处找了，只要维护好url.js向外暴露的对象即可。使用方法如下：
 ```
@@ -108,21 +149,23 @@ API.fetchUserInfo(params).then(response=>{
 
 **index.js**
 
+组件的样式需要用到withStyles进行包裹，具体用法可查看isomorphic-style-loader的文档。
 ```
 import React from 'react';
-import './style.scss';
+import withStyles from 'isomorphic-style-loader/withStyles';
+import styles from './style.scss';
 class HelloWorld extends React.PureComponent{
   render(){
     return (
-      <h4 className="u-text">Hello World</h4>
+      <h4 className={styles.text}>Hello World</h4>
     )
   }
 }
-export default HelloWorld;
+export default withStyles(styles)(HelloWorld);
 ```
 **style.scss**
 ```
-.u-text{
+.text{
   color: red;
 }
 ```
@@ -166,7 +209,7 @@ export default BasicLayout;
     <div>隔壁老王今日行程：</div>
     <div>
         <div>今天隔壁老王比较累，不工作！</div>
-    </div> 
+    </div>
 </div>
 ```
 这样我们可以基于BasicLayout做出很多个像下面的页面。
@@ -175,7 +218,7 @@ export default BasicLayout;
     <div>隔壁老王今日行程：</div>
     <div>
        //<不同的内容>
-    </div> 
+    </div>
 </div>
 ```
 使用这种方法就可以将我们得所有路由写在一起了，可能有人觉得每次都要写引入BasicLayout很麻烦，有没有其他更好用的办法，在讲App.js的时候会说到这里就先跳过。
@@ -186,8 +229,9 @@ export default BasicLayout;
 - index.js ---- 页面的入口文件
 - style.scss ---- 页面所需要的样式
 具体代码可以自行git clone 项目查看，这里就不贴出来了。
-### scss
-这里存放共有的scss文件，比较一些常用的功能类、@mixin、@function等等。
+### styles
+- scss 这里存放共有的scss文件，比较一些常用的功能类、@mixin、@function等等。
+- css 这里存放共有的css文件。
 ### store
 这里有四个文件：
 - **actions.js**
@@ -250,123 +294,161 @@ export const fecthUserName=(params)=> async (dispatch,getState,{API})=>{
 ### utils
 这里会存放一些自己的封装的js工具文件，比如我在项目基于axios封装了一个http.js,简化了axios的操作。
 
-### router/index.js
-这里以配置化的防止去注册路由，并app.js里面去渲染路由标签。
-```
-import Loadable from 'react-loadable';
-import createHistory from 'history/createBrowserHistory';
-import BasicLayout from '@/layouts/BasicLayout';
-import NavTwoLayout from '@/layouts/NavTwoLayout';
-import Loading from '@/components/Loading';
-import NotFound from '@/pages/Exception/404';
-
-
-const Home = Loadable({loader: () => import('@/pages/Home'),loading: Loading});
-const Teachers = Loadable({loader: () => import('@/pages/Teachers'),loading: Loading});
-
-export const history = createHistory();
-
-export const routes = [
-  {
-    path:'/',
-    redirect:'/navone/home'
-  },
-  {
-    path:'/navone',
-    redirect:'/navone/home',
-    children:[{
-      path:'/home',
-      layout:BasicLayout,
-      component:Home
-    }]
-  },
-  {
-    path:'/navtwo',
-    redirect:'/navtwo/teachers',
-    children:[{
-      path:'/teachers',
-      layout:NavTwoLayout,
-      component:Teachers
-    }]
-  },
-  {
-    path:'*',
-    component:NotFound
-  }
-]
-```
-### App.js
-这里根据路由配置用来渲染路由标签，先放代码：
+### router/routes.js
+这里以配置化的方式去注册路由，向外暴露一个获取路由的方法，该方法只接受一个参数type（环境类型 client、server），可以通过该方法获取不同环境下的路由配置。
 ```
 import React from 'react';
-import {Router} from 'react-router-dom';
-import {Switch, Route ,Redirect} from 'react-router';
-import {history,routes} from '@/router';
+import loadable from '@loadable/component';
+import BasicLayout from '@/layouts/BasicLayout';
+import NavTwoLayout from '@/layouts/NavTwoLayout';
+import NotFound from '@/pages/Exception/404';
+import Loading from '@/components/Loading';
+import Home from '@/pages/Home';
+import Teachers from '@/pages/Teachers';
 
+const  AsyncHome =  loadable (() => import('@/pages/Home'),{fallback:<Loading/>});
+const  AsyncTeachers = loadable (() => import('@/pages/Teachers'),{fallback:<Loading/>});
 
-
+export default (type)=>{
+  return [
+    {
+      path:'/',
+      redirect:'/navone/home'
+    },
+    {
+      path:'/navone',
+      redirect:'/navone/home',
+      children:[{
+        path:'/home',
+        layout:BasicLayout,
+        component:type==='client'?AsyncHome:Home,
+        loadData:Home.loadData
+      }]
+    },
+    {
+      path:'/navtwo',
+      redirect:'/navtwo/teachers',
+      children:[{
+        path:'/teachers',
+        layout:NavTwoLayout,
+        component:type==='client'?AsyncTeachers:Teachers
+      }]
+    },
+    {
+      path:'*',
+      exact:false,
+      render:({staticContext})=>{
+        if (staticContext) staticContext.NOT_FOUND = true;
+        return <NotFound/>
+      }
+    }
+  ]
+}
+```
+### router/routes.js
+- getRouterByRoutes 根据配置生产路由
+- getRouter 获取不同环境下的Router
+- matchRoutesConfig 根据路径匹配路由配置项
+```
+import React from 'react';
+import {StaticRouter,Router,Switch,Route,Redirect} from 'react-router';
+import {createBrowserHistory} from 'history';
+import getRoutes from './routes';
 function getRouterByRoutes(routes){
   const renderedRoutesList = [];
   const renderRoutes = (routes,parentPath)=>{
     Array.isArray(routes)&&routes.forEach((route)=>{
-      const {path,redirect,children,layout,component} = route;
+      const {path,redirect,children,layout,exact=true,component,render} = route;
       if(redirect){
-        renderedRoutesList.push(<Redirect key={`${parentPath}${path}`} exact from={path} to={`${parentPath}${redirect}`}/>)
+        renderedRoutesList.push(<Redirect key={`${parentPath}${path}`} exact={exact} from={path} to={`${parentPath}${redirect}`}/>)
       }
       if(component){
         renderedRoutesList.push(
-          layout?<Route 
-            key={`${parentPath}${path}`} 
-            exact path={`${parentPath}${path}`}
-            render={(props)=>React.createElement(layout,props,React.createElement(component,props))} />:
-          <Route 
-              key={`${parentPath}${path}`} 
-              exact 
-              path={`${parentPath}${path}`} 
-              component={component}/>)
+          <Route
+            key={`${parentPath}${path}`}
+            exact={exact}
+            path={`${parentPath}${path}`}
+            render={(props)=>layout?React.createElement(layout,props,React.createElement(component,props)):React.createElement(component,props)} />
+        )
+      }
+      if(render){
+        renderedRoutesList.push(<Route
+          key={`${parentPath}${path}`}
+          exact={exact}
+          path={`${parentPath}${path}`}
+          render={render}/>)
       }
       if(Array.isArray(children)&&children.length>0){
         renderRoutes(children,path)
       }
     });
-  }  
+  }
   renderRoutes(routes,'')
   return renderedRoutesList;
- 
 }
-class App extends React.PureComponent{
-  render(){
-    return (
-      <Router history={history}>
-        <Switch>
-          {getRouterByRoutes(routes)}
-        </Switch>
-      </Router>
-    )
+export const getRouter = (type)=>(params)=>{
+  const routerContent = <Switch>{getRouterByRoutes(getRoutes(type))}</Switch> 
+  if(type==='client'){
+    const history = createBrowserHistory();
+    return <Router history={history}>{routerContent}</Router>
+  }else if(type==='server'){
+    return <StaticRouter {...params}>{routerContent}</StaticRouter>
   }
 }
-export default App;
+export const matchRoutesConfig = (pathname)=>{
+  const reg = /\/[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?/g;
+  const paths = pathname.match(reg);
+  const matchedRoutes = [];
+  function matchRoute(toBeMatchedRoutes){
+    const matchedPath = paths.shift();
+    for(let i=0;i<toBeMatchedRoutes.length;i++){
+      const current = toBeMatchedRoutes[i];
+      if(Array.isArray(current.children)){
+        matchRoute(current.children);
+      }
+      if(current.path===matchedPath){
+        matchedRoutes.push(current);
+        break;
+      }
+    }
+  }
+  if(Array.isArray(paths)){
+    matchRoute(getRoutes('server'));
+  }
+  return matchedRoutes;
+}
 ```
+### App.js
+这里根据路由配置用来渲染路由标签，先放代码：
 这里我们需要重点讲的是之间在layouts中我们跳过的内容，能不能不每次都用layout组件去包裹代码，答案是可以的。这里我选择<Route>中的render属性。
 ### main.js
-webpack入口文件，主要一些全局js或者scss的导入，并执行react-dom下的render方法，代码如下：
+webpack入口文件，主要一些全局js或者scss的导入，并执行react-dom下的hydrate方法，代码如下：
 ```
+import '@babel/polyfill';
 import React from 'react';
-import {render} from 'react-dom';
-import {Provider} from 'react-redux';
-import store from '@/store';
-import App from '@/App';
-import '@/scss/reset.scss';
-import '@/scss/base.scss';
+import {hydrate,render} from 'react-dom';
+import App from './App';
 
-
-render(
-  <Provider store={store}>
-    <App/>
-  </Provider>,
+import '@/styles/css/reset.css';
+import '@/styles/css/base.css';
+const renderMethod = module.hot?render:hydrate;
+renderMethod(
+  <App/>,
   document.getElementById('app')
 )
 
+```
+**app.js**
+```
+const store = getStore(window.INITIAL_STATE);
+class App extends React.PureComponent{
+  render(){
+    return  <StyleContext.Provider value={{ insertCss }}>
+      <Provider store={store}>{getRouter('client')()}</Provider>
+    </StyleContext.Provider>
+  }
+}
+export default App;
 ```
 ## static
 这是一个静态资源目录，一般存放一些第三方工具库。这个目录主要两方面考虑：
@@ -378,15 +460,21 @@ render(
 
 这里存放着页面和组件级别构建所需要的模板文件，页面级别构建提供了两种模板PageReducer（集成了reducer）和PageSample（不集成reducer），而组件只提供了一种模板ComSample。页面和组件级别的构建是需要配合asuna-cli才能构建，目前项目已经集成了asuna-cli。package.json写了两个script：npm run newPage（页面构建）和npm run newComponent（组件构建）。开发可根据实际需要选择构建，asuna-cli具体使用可以去[asuna-cli](https://github.com/ruichengping/asuna-cli)查看。
 
-## 其他文件 
-- .babelrc ---- babel转换的配置文件
+## 其他文件
+- babelConfig.js ---- 获取babel配置项
 - .gitignore ---- git操作所需要忽略的文件
 - .postcssrc.js ---- postcss的配置文件
-- index.html ---- 模板index.html,webpack会根据此生成新的index.html,配合**html-webpack-plugin**使用
+- index.hbs ---- 配合**html-webpack-plugin**生成供node环境下handlebars模版引擎使用的.hbs文件
 - package.json ---- 家喻户晓的东西
+- nodemon.json ---- nodemon配置文件
 - README.md ---- 项目说明
 - theme.js ----  ant-design的主题色配置文件，具体使用可以参考ant-design
 - asuna.config.js ---- asuna-cli的配置文件
 - yarn.lock ---- 锁定包的版本
-## 结语
-这个只是个人搭建企业级React项目的一些总结。当然存在不足的地方，后面在工作过程中如果有一些好的想法也会在这上面进行更新。欢迎大家Star关注！如果你也有好的想法欢迎留言交流，希望这篇拙文能给大家一些启发。
+# 结语
+这个项目是一个服务端渲染的项目，它比客户端渲染的项目复杂许多，如果没有特别需要，不建议使用服务端渲染。我个人选择服务端渲染时该项目必须满足以下三个条件（仅供参考）：
+- 比较在意白屏时间
+- 接口的等待时间较短
+- 页面数量很多，而且未来有很大的增长空间
+
+
