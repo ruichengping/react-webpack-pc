@@ -2,6 +2,7 @@ const path = require('path');
 module.exports={
   client:{
     sourceMap: true,
+    // bundleAnalyzerReport:true,
     devtool: 'source-map'
   },
   server:{

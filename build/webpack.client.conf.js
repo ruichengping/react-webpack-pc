@@ -47,6 +47,11 @@ const prodPlugins = [
   }),
   new webpack.HashedModuleIdsPlugin()
 ];
+if(config.client.bundleAnalyzerReport){
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+  prodPlugins.push(new BundleAnalyzerPlugin())
+}
+
 const isProd = process.env.NODE_ENV === 'production';
 const clientWebpackConfig = merge(getBaseWebpackConfig('client'),{
   entry: {
@@ -63,17 +68,13 @@ const clientWebpackConfig = merge(getBaseWebpackConfig('client'),{
   optimization:isProd?{
     splitChunks:{
       chunks: 'all',
-      minSize: 30000,
-      maxSize: 0,
-      minChunks: 1,
-      maxAsyncRequests: 5,
-      maxInitialRequests: 3,
-      automaticNameDelimiter: '~',
-      name: true,
+      name: true ,
       cacheGroups: {
         vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          priority: -10
+          test: /[\\/]node_modules[\\/](react|react-dom|lodash)[\\/]/,
+        },
+        antdesign:{
+          test: /[\\/]node_modules[\\/]@ant-design[\\/]/
         }
       }
     },
