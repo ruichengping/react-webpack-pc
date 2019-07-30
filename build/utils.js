@@ -1,26 +1,11 @@
 'use strict'
 const path = require('path')
-const os = require('os')
 const config = require('config')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const packageConfig = require('../package.json')
 const theme=require('../theme')
 
 const devMode = process.env.NODE_ENV !== 'production'
-
-exports.getLocalIPAdress = function (){
-  const interfaces = os.networkInterfaces();
-  let localIpAdress = '';
-  Object.keys(interfaces).forEach((devName)=>{
-    const iface = interfaces[devName];
-    iface.forEach((alias)=>{
-      if(alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal){
-        localIpAdress = alias.address;
-      }
-    });
-  })
-  return localIpAdress;
-}
 exports.assetsPath = function (_path) {
   return path.posix.join(config.client.assetsSubDirectory, _path)
 }
@@ -71,9 +56,10 @@ exports.cssLoaders = function (options) {
     if (loader!=='css') {
       loaders.push({
         loader: loader + '-loader',
-        options: Object.assign({}, loaderOptions, {
+        options: {
+          ...loaderOptions,
           sourceMap: options.sourceMap
-        })
+        }
       })
     }
 

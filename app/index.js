@@ -1,12 +1,12 @@
 import express from 'express';
 import config from 'config';
 import chalk from 'chalk';
-import utils from '../build/utils';
 import proxy from 'http-proxy-middleware';
 import hbs from 'hbs';
+import {getLocalIpAdress} from './utils' ;
 import render from './render';
 const app = express();
-hbs.registerHelper('safe_string',(code)=>{
+hbs.registerHelper('safeString',(code)=>{
   return new hbs.SafeString(code);
 })
 app.set('views','dist/client');
@@ -25,5 +25,5 @@ app.use((err,req,res)=>{
   res.status(500).send(err);
 })
 app.listen(config.server.port,()=>{
-  if(process.env.NODE_ENV === 'production') console.log(chalk.green(`Your application is running here: http://${utils.getLocalIPAdress()}:${config.server.port}`)) 
+  if(process.env.NODE_ENV === 'production') console.log(chalk.green(`Your application is running here: http://${getLocalIpAdress()}:${config.server.port}`))
 });
