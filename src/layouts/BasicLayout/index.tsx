@@ -9,7 +9,7 @@ import './style.scss';
 const { Header, Content} = Layout;
 
 interface BasicLayoutProps extends RouteComponentProps{
-  fecthUserName:Function
+  fecthUserName():void
   user:User,
   className:string
 }

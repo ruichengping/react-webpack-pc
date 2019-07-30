@@ -2,7 +2,7 @@ import * as actionTypes from './actionTypes';
 
 import {Dispatch} from 'redux';
 
-export const fetchAuthorData=(params:any)=>async (dispatch:Dispatch,getState:Function,{API}:any)=>{
+export const fetchAuthorData=(params?:Params)=>async (dispatch:Dispatch,getState:()=>State,{API}:any)=>{
   const response= await API.fetchAuthorInfo(params);
   const {success,data} = response;
   if(success){

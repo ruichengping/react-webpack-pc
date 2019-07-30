@@ -35,7 +35,7 @@ package.json我配置一个script，如下：
 控制台执行“npm run mock“即可。
 
 ## src
-### api 
+### api
 **url.ts**
 ```
 
@@ -66,14 +66,13 @@ import {keys} from 'lodash'
 import http from '@/utils/http'
 import {Api,ApiModel} from './url';
 
-
 function mapUrlObjToFuncObj(apiModel:Api){
   const API: {
-    [propName:string]:Function
+    [propName:string]:(params?:Params)=>any
   } = {};
   keys(apiModel).forEach((key:string)=>{
     const item = apiModel[key]
-    API[key]=function(params:any){
+    API[key]=function(params:Params){
       return http[item.method](item.url,params)
     }
   });
@@ -93,8 +92,6 @@ function mapUrlObjToStrObj(apiModel:Api){
 
 export const API = mapUrlObjToFuncObj(ApiModel);
 export const URL = mapUrlObjToStrObj(ApiModel);
-   
-   
 ```
 这里我们用来放置api的接口地址，为了后续的接口维护，我们在使用的过程中不会直接写死接口地址，而是将接口请求封装成一个个方法。通过对接口的统一维护，我们就可以做到在执行修改接口地址、修改请求方法、新增接口等等操作时，就不用在整个项目里到处找了，只要维护好url.ts向外暴露的对象即可。使用方法如下：
 ```
@@ -202,7 +199,7 @@ export default BasicLayout;
     <div>隔壁老王今日行程：</div>
     <div>
         <div>今天隔壁老王比较累，不工作！</div>
-    </div> 
+    </div>
 </div>
 ```
 这样我们可以基于BasicLayout做出很多个像下面的页面。
@@ -211,7 +208,7 @@ export default BasicLayout;
     <div>隔壁老王今日行程：</div>
     <div>
        //<不同的内容>
-    </div> 
+    </div>
 </div>
 ```
 使用这种方法就可以将我们得所有路由写在一起了，可能有人觉得每次都要写引入BasicLayout很麻烦，有没有其他更好用的办法，在讲App.tsx的时候会说到这里就先跳过。
@@ -259,7 +256,7 @@ export default store;
 import * as actionTypes from './actionTypes';
 import API from '../api';
 
-export const fecthUserName=(params)=> async (dispatch:Dispatch,getState:Function)=>{
+export const fecthUserName=(params?:Params)=> async (dispatch:Dispatch,getState:()=>State)=>{
   const response =await API.fetchUserInfo(params);
   const {success,data} = response;
   if(success){
@@ -275,7 +272,7 @@ export const fecthUserName=(params)=> async (dispatch:Dispatch,getState:Function
 import * as actionTypes from './actionTypes';
 import { Dispatch } from 'redux';
 
-export const fecthUserName=(params?:any)=> async (dispatch:Dispatch,getState:Function,{API}:any)=>{
+export const fecthUserName=(params?:Params)=> async (dispatch:Dispatch,getState:()=>State,{API}:any)=>{
   const response =await API.fetchUserInfo(params);
   const {success,data} = response;
   if(success){
@@ -292,15 +289,13 @@ export const fecthUserName=(params?:any)=> async (dispatch:Dispatch,getState:Fun
 ### router/index.ts
 这里以配置化的防止去注册路由，并app.tsx里面去渲染路由标签。
 ```
-import { ComponentClass, ComponentType } from 'react';
-import Loadable from 'react-loadable';
+import { ComponentClass, ComponentType,LazyExoticComponent,lazy } from 'react';
 import createHistory from 'history/createBrowserHistory';
 import BasicLayout from '@/layouts/BasicLayout';
 import NavTwoLayout from '@/layouts/NavTwoLayout';
-import Loading from '@/components/Loading';
 import NotFound from '@/pages/Exception/404';
-const Home = Loadable({loader: () => import('@/pages/Home'),loading: Loading});
-const Teachers = Loadable({loader: () => import('@/pages/Teachers'),loading: Loading});
+const Home = lazy(() => import('@/pages/Home'));
+const Teachers = lazy(() => import('@/pages/Teachers'));
 
 export const history = createHistory();
 
@@ -309,7 +304,7 @@ interface RouteItem{
   redirect?:string,
   layout?:ComponentClass
   children?:RouteItem[]
-  component?:ComponentType
+  component?:ComponentType | LazyExoticComponent<ComponentType>
 }
 export const routes:RouteItem[] = [
   {
@@ -343,17 +338,18 @@ export const routes:RouteItem[] = [
 ### App.tsx
 这里根据路由配置用来渲染路由标签，先放代码：
 ```
-import React, { ReactElement,ComponentClass,ComponentType} from 'react';
+import React, { ReactElement,ComponentClass,ComponentType,LazyExoticComponent,Suspense} from 'react';
 import {Router} from 'react-router-dom';
 import {Switch, Route ,Redirect} from 'react-router';
 import {history,routes} from '@/router';
+import Loading from '@/components/Loading';
 
 interface RouteItem {
   path:string,
   redirect?:string,
   children?:RouteItem[],
   layout?:ComponentClass,
-  component?:ComponentType
+  component?:ComponentType | LazyExoticComponent<ComponentType>
 }
 
 function getRouterByRoutes(routes:RouteItem[]){
@@ -366,32 +362,33 @@ function getRouterByRoutes(routes:RouteItem[]){
       }
       if(component){
         renderedRoutesList.push(
-          layout?<Route 
-            key={`${parentPath}${path}`} 
+          layout?<Route
+            key={`${parentPath}${path}`}
             exact path={`${parentPath}${path}`}
             render={(props:any)=>React.createElement(layout,props,React.createElement(component,props))} />:
-          <Route 
-              key={`${parentPath}${path}`} 
-              exact 
-              path={`${parentPath}${path}`} 
+          <Route
+              key={`${parentPath}${path}`}
+              exact
+              path={`${parentPath}${path}`}
               component={component}/>)
       }
       if(Array.isArray(children)&&children.length>0){
         renderRoutes(children,path)
       }
     });
-  }  
+  }
   renderRoutes(routes,'')
   return renderedRoutesList;
- 
 }
 class App extends React.PureComponent{
   render(){
     return (
       <Router history={history}>
-        <Switch>
-          {getRouterByRoutes(routes)}
-        </Switch>
+        <Suspense fallback={<Loading/>}>
+          <Switch>
+            {getRouterByRoutes(routes)}
+          </Switch>
+        </Suspense>
       </Router>
     )
   }
@@ -425,7 +422,7 @@ render(
 
 其实第三方工具库最好的方式是CDN，但是有些公司就是没有，无奈只能如此。你加入的第三工具库都可在当前服务器下”**/static/***“路径下获取到。
 
-## 其他文件 
+## 其他文件
 - tsconfig.json ---- typescript配置文件
 - .gitignore ---- git操作所需要忽略的文件
 - .postcssrc.js ---- postcss的配置文件

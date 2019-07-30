@@ -1,9 +1,9 @@
 import React, { FC, ReactElement } from 'react';
-import {LoadingComponentProps} from 'react-loadable';
+
 import './style.scss';
 
-interface LoadingProps extends LoadingComponentProps{
-  loading:boolean,
+interface LoadingProps {
+  loading?:boolean,
   children?:ReactElement
 }
 
@@ -16,6 +16,6 @@ const Loading:FC<LoadingProps> = ({loading=true,children})=>{
       <div className="item-4"></div>
       <div className="item-5"></div>
     </div>:children
-  )  
+  )
 }
 export default Loading;

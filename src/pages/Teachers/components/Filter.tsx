@@ -1,10 +1,11 @@
 import React, { FormEvent } from 'react';
 import {Form, Input, Select, Button} from 'antd';
+import {FormComponentProps} from 'antd/lib/form/Form.d';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-interface FilterProps{
-  onSearch:Function,
+interface FilterProps extends FormComponentProps{
+  onSearch:(data:{[propName:string]:any})=>void,
   form:any
 }
 
@@ -12,7 +13,7 @@ export interface FilterFormData{
   name:string,
   sex:string
 }
-class Filter extends React.PureComponent<FilterProps>{
+class Filter extends React.PureComponent<FilterProps,any>{
   //搜索
   handleSubmit=(e:FormEvent)=>{
     e.preventDefault();
@@ -47,4 +48,4 @@ class Filter extends React.PureComponent<FilterProps>{
     )
   }
 }
-export default Form.create()(Filter)
+export default Form.create<FilterProps>()(Filter)
