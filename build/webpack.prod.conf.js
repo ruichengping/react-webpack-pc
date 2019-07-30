@@ -30,7 +30,6 @@ const webpackConfig = merge(baseWebpackConfig, {
   optimization:{
     splitChunks:{
       chunks:'all',
-      minChunks:1,
       cacheGroups: {
         vendors:{
           test: /[\\/]node_modules[\\/](react|react-dom|lodash)[\\/]/,
