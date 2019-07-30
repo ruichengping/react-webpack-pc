@@ -22,8 +22,6 @@ module.exports = {
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    //https://webpack.js.org/concepts/mode/#mode-development
-    mode:'development',
     
     /**
      * Source Maps
@@ -49,8 +47,6 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 
-    //https://webpack.js.org/concepts/mode/#mode-production
-    mode:'production',
 
     /**
      * Source Maps

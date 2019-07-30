@@ -22,7 +22,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       usePostCSS: true
     })
   },
-  mode: config.build.mode,
+  mode: 'production',
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
     path: config.build.assetsRoot,
@@ -30,19 +30,14 @@ const webpackConfig = merge(baseWebpackConfig, {
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   optimization:{
+    chunks: 'all',
     splitChunks:{
-      chunks: 'all',
-      minSize: 30000,
-      maxSize: 0,
-      minChunks: 1,
-      maxAsyncRequests: 5,
-      maxInitialRequests: 3,
-      automaticNameDelimiter: '~',
-      name: true,
       cacheGroups: {
         vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          priority: -10
+          test: /[\\/]node_modules[\\/](react|react-dom|lodash)[\\/]/,
+        },
+        antdesign:{
+          test: /[\\/]node_modules[\\/]@ant-design[\\/]/
         }
       }
     },
