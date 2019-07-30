@@ -1,13 +1,12 @@
-import Loadable from 'react-loadable';
+import {lazy} from 'react';
 import createHistory from 'history/createBrowserHistory';
 import BasicLayout from '@/layouts/BasicLayout';
 import NavTwoLayout from '@/layouts/NavTwoLayout';
-import Loading from '@/components/Loading';
 import NotFound from '@/pages/Exception/404';
 
 
-const Home = Loadable({loader: () => import('@/pages/Home'),loading: Loading});
-const Teachers = Loadable({loader: () => import('@/pages/Teachers'),loading: Loading});
+const Home = lazy(() => import('@/pages/Home'));
+const Teachers = lazy(() => import('@/pages/Teachers'));
 
 export const history = createHistory();
 
