@@ -30,8 +30,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   optimization:{
-    chunks: 'all',
     splitChunks:{
+      chunks: 'all',
       cacheGroups: {
         vendors: {
           test: /[\\/]node_modules[\\/](react|react-dom|lodash)[\\/]/,
@@ -44,7 +44,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     runtimeChunk: {
       name: 'runtime'
     },
-    minimizer:[ 
+    minimizer:[
       new OptimizeCSSAssetsPlugin({
         cssProcessorOptions: config.build.productionSourceMap
           ? { safe: true, map: { inline: false } }
@@ -69,7 +69,6 @@ const webpackConfig = merge(baseWebpackConfig, {
       filename: utils.assetsPath('css/[name].[contenthash].css'),
       chunkFilename: utils.assetsPath('css/[id].css')
     }),
-   
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
