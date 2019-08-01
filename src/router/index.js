@@ -44,7 +44,7 @@ export const getRouter = (type)=>(params)=>{
   }
 }
 export const matchRoutesConfig = (pathname)=>{
-  const reg = /\/[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?/g;
+  const reg = /\/[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*/g;
   const paths = pathname.match(reg);
   const matchedRoutes = [];
   function matchRoute(toBeMatchedRoutes){

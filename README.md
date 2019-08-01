@@ -12,6 +12,8 @@ yarn
 ### 开发环境
 ```
 yarn dev
+
+yarn mock //启动mock服务
 ```
 ### 生产环境
 ```
