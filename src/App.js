@@ -1,50 +1,27 @@
-import React,{Suspense} from 'react';
-import {Router} from 'react-router-dom';
-import {Switch, Route ,Redirect} from 'react-router';
-import {history,routes} from '@/router';
+import React,{Suspense,useEffect} from 'react';
+import {bindActionCreators} from 'redux';
+import {useDispatch} from 'react-redux';
+import {Router,Switch} from 'react-router-dom';
+import {history,routes,renderRoutes} from '@/router';
+import * as actions from '@/store/actions';
 import Loading from '@/components/Loading';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
-
-
-function getRouterByRoutes(routes){
-  const renderedRoutesList = [];
-  const renderRoutes = (routes,parentPath)=>{
-    Array.isArray(routes)&&routes.forEach((route)=>{
-      const {path,redirect,children,layout,component} = route;
-      if(redirect){
-        renderedRoutesList.push(<Redirect key={`${parentPath}${path}`} exact from={path} to={`${parentPath}${redirect}`}/>)
-      }
-      if(component){
-        renderedRoutesList.push(
-          layout?<Route
-            key={`${parentPath}${path}`}
-            exact path={`${parentPath}${path}`}
-            render={(props)=>React.createElement(layout,props,React.createElement(component,props))} />:
-          <Route
-              key={`${parentPath}${path}`}
-              exact
-              path={`${parentPath}${path}`}
-              component={component}/>)
-      }
-      if(Array.isArray(children)&&children.length>0){
-        renderRoutes(children,path)
-      }
-    });
-  }
-  renderRoutes(routes,'')
-  return renderedRoutesList;
-}
-class App extends React.PureComponent{
-  render(){
-    return (
-      <Router history={history}>
-        <Suspense fallback={<Loading/>}>
+export default ()=>{
+  const dispatch = useDispatch();
+  const {fecthUserInfo} = bindActionCreators(actions,dispatch)
+  useEffect(()=>{
+    fecthUserInfo();
+  },[])
+  return (
+    <Router history={history}>
+      <Suspense fallback={<Loading/>}>
+        <ErrorBoundary>
           <Switch>
-            {getRouterByRoutes(routes)}
+            {renderRoutes(routes)}
           </Switch>
-        </Suspense>
-      </Router>
-    )
-  }
-}
-export default App;
+        </ErrorBoundary>
+      </Suspense>
+    </Router>
+  )
+};

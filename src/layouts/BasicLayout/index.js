@@ -4,12 +4,12 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types'
-import {withRouter} from 'react-router';
+import {withRouter} from 'react-router-dom';
 import * as globalActions from '../../store/actions';
 const { Header, Content} = Layout;
 import './style.scss';
 @connect(
-  state=>({user:state.user}),
+  state=>({userInfo:state.global.userInfo}),
   dispatch=>bindActionCreators(globalActions,dispatch)
 )
 class BasicLayout extends React.PureComponent{
@@ -17,14 +17,8 @@ class BasicLayout extends React.PureComponent{
     history: PropTypes.object.isRequired,
     match:PropTypes.object.isRequired
   }
-  constructor(props){
-    super(props);
-    const {match} = props;
-    const {fecthUserName} = props;
-    fecthUserName();
-    this.state={
-      menuSelectedKeys:[match.path.match(/^\/[a-zA-Z]+/)[0]]
-    }
+  state={
+    menuSelectedKeys:[this.props.match.path.match(/^\/[a-zA-Z]+/)[0]]
   }
   //响应导航栏跳转
   handleMenuClick=({key})=>{
@@ -33,8 +27,8 @@ class BasicLayout extends React.PureComponent{
   }
   render(){
     const {menuSelectedKeys} = this.state;
-    const {user,children,className} = this.props;
-    const {username} = user;
+    const {userInfo,children,className} = this.props;
+    const {username} = userInfo;
     const content=(
       <ul className="m-user-operation-list">
         <li className="operation-item" key="1"><Link to="/user/center">用户信息</Link></li>

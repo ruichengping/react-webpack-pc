@@ -21,7 +21,7 @@ const sexMapper = (sex)=>{
 }
 
 @connect(
-  state => ({ user:state.user }),
+  state => ({ userInfo:state.global.userInfo }),
 )
 export default class Teachers extends React.PureComponent {
   state={
@@ -83,8 +83,8 @@ export default class Teachers extends React.PureComponent {
   }
   render() {
     const {pageNo,pageSize,teacherList} = this.state;
-    const { user } = this.props;
-    const {username} = user;
+    const { userInfo } = this.props;
+    const {username} = userInfo;
     const columns = [
       {
         key:'index',

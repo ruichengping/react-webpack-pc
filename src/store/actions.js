@@ -1,11 +1,11 @@
-import * as actionTypes from './actionTypes';
+import {CHANGE_USER_INFO} from './actionTypes';
 
-export const fecthUserName=(params)=> async (dispatch,getState,{API})=>{
+export const fecthUserInfo=(params)=> async (dispatch,getState,{API})=>{
   const response =await API.fetchUserInfo(params);
   const {success,data} = response;
   if(success){
     dispatch({
-      type:actionTypes.CHANGE_USER_NAME,
+      type:CHANGE_USER_INFO,
       payload:data
     });
   }
