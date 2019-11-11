@@ -1,21 +1,20 @@
-import { ComponentClass, ComponentType,LazyExoticComponent,lazy } from 'react';
-import createHistory from 'history/createBrowserHistory';
+
+import { ComponentType,LazyExoticComponent,lazy } from 'react';
+import {} from 'react-router-dom';
 import BasicLayout from '@/layouts/BasicLayout';
 import NavTwoLayout from '@/layouts/NavTwoLayout';
 import NotFound from '@/pages/Exception/404';
 const Home = lazy(() => import('@/pages/Home'));
 const Teachers = lazy(() => import('@/pages/Teachers'));
-
-export const history = createHistory();
-
-interface RouteItem{
+export interface RouteItem{
   path:string,
   redirect?:string,
-  layout?:ComponentClass
-  children?:RouteItem[]
+  layout?:any,
+  children?:RouteItem[],
+  parent?:RouteItem,
   component?:ComponentType | LazyExoticComponent<ComponentType>
 }
-export const routes:RouteItem[] = [
+const routes:RouteItem[] = [
   {
     path:'/',
     redirect:'/navone/home'
@@ -43,3 +42,4 @@ export const routes:RouteItem[] = [
     component:NotFound
   }
 ]
+export default routes;

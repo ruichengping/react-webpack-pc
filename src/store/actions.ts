@@ -1,12 +1,12 @@
-import * as actionTypes from './actionTypes';
+import {CHANGE_USER_INFO} from './actionTypes';
 import { Dispatch } from 'redux';
 
-export const fecthUserName=(params?:Params)=> async (dispatch:Dispatch,getState:()=>State,{API}:any)=>{
+export const fecthUserInfo=(params?:Params)=> async (dispatch:Dispatch,getState:()=>State,{API}:any)=>{
   const response =await API.fetchUserInfo(params);
   const {success,data} = response;
   if(success){
     dispatch({
-      type:actionTypes.CHANGE_USER_NAME,
+      type:CHANGE_USER_INFO,
       payload:data
     });
   }

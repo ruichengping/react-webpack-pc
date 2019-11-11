@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import {bindActionCreators,Dispatch} from 'redux';
 import * as actions from './redux/actions';
 import './style.scss';
 import {Icon} from 'antd';
@@ -36,6 +36,6 @@ class Home extends React.PureComponent<HomeProps>{
   }
 }
 export default connect(
-  (state:State)=>({user:state.user,author:state.author}),
-  dispatch=>bindActionCreators(actions,dispatch)
+  (state:State)=>({userInfo:state.global.userInfo,author:state.author}),
+  (dispatch:Dispatch)=>bindActionCreators(actions,dispatch)
 )(Home);

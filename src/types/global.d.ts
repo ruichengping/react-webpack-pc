@@ -1,6 +1,6 @@
 
-interface User {
-  username:string
+interface Global {
+  userInfo:any
 }
 interface Params{
   [propName:string]:any
@@ -9,7 +9,7 @@ interface Author{
   info:any
 }
 interface State{
-  user:User,
+  global:Global,
   author:Author
 }
 

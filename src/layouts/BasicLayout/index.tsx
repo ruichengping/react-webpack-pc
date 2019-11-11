@@ -1,7 +1,7 @@
-import React from 'react';
+import React,{ReactNode,ReactNodeArray} from 'react';
 import {Menu,Popover,Avatar,Icon,Layout} from 'antd';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import {bindActionCreators,Dispatch} from 'redux';
 import {Link,RouteComponentProps} from 'react-router-dom';
 import {withRouter} from 'react-router';
 import * as globalActions from '../../store/actions';
@@ -9,9 +9,9 @@ import './style.scss';
 const { Header, Content} = Layout;
 
 interface BasicLayoutProps extends RouteComponentProps{
-  fecthUserName():void
-  user:User,
-  className:string
+  userInfo:any,
+  className:string,
+  children:ReactNode|ReactNodeArray
 }
 interface BasicLayoutState{
   menuSelectedKeys:string[]
@@ -19,14 +19,8 @@ interface BasicLayoutState{
 
 
 class BasicLayout extends React.PureComponent<BasicLayoutProps,BasicLayoutState>{
-  constructor(props:BasicLayoutProps){
-    super(props);
-    const {match} = props;
-    const {fecthUserName} = props;
-    fecthUserName();
-    this.state={
-      menuSelectedKeys:[match.path.match(/^\/[a-zA-Z]+/)[0]]
-    }
+  state={
+    menuSelectedKeys:[this.props.match.path.match(/^\/[a-zA-Z]+/)[0]]
   }
   //响应导航栏跳转
   handleMenuClick=({key}:any)=>{
@@ -35,8 +29,8 @@ class BasicLayout extends React.PureComponent<BasicLayoutProps,BasicLayoutState>
   }
   render(){
     const {menuSelectedKeys} = this.state;
-    const {user,children,className} = this.props;
-    const {username} = user;
+    const {userInfo,children,className} = this.props;
+    const {username} = userInfo;
     const content=(
       <ul className="m-user-operation-list">
         <li className="operation-item" key="1"><Link to="/user/center">用户信息</Link></li>
@@ -74,6 +68,6 @@ class BasicLayout extends React.PureComponent<BasicLayoutProps,BasicLayoutState>
   }
 }
 export default connect(
-  (state:State)=>({user:state.user}),
-  dispatch=>bindActionCreators(globalActions,dispatch)
+  (state:State)=>({userInfo:state.global.userInfo}),
+  (dispatch:Dispatch)=>bindActionCreators(globalActions,dispatch)
 )(withRouter(BasicLayout));
