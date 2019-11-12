@@ -22,11 +22,18 @@
       }
     }
     .m-right{
-      .u-user-name{
+      padding-right:20px;
+      .icon-notice,.icon-help{
         color: #fff;
-        font-size: 16px;
-        padding-right: 20px;
+        font-size: 18px;
       }
+      .icon-notice{
+        margin: 0 18px 0 6px;
+      }
+      .icon-help{
+        margin-right: 24px;
+      }
+
     }
   }
   .g-body{
@@ -45,5 +52,13 @@
     a:hover{
       color: #409eff;
     }
+  }
+}
+.user-info-panel{
+  .basic-info{
+    display: flex;
+  }
+  .action-menu{
+    margin-top: 10px;
   }
 }
