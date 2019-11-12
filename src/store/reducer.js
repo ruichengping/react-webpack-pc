@@ -1,4 +1,4 @@
-import * as actionTypes from './actionTypes';
+import {CHANGE_USER_NAME} from './actionTypes';
 const initialState={
   username:''
 }
@@ -6,8 +6,8 @@ const initialState={
 export default (state=initialState,actions)=>{
   const {type,payload}=actions;
   switch(type){
-    case actionTypes.CHANGE_USER_NAME:
-      return Object.assign({},initialState,{username:payload});
+    case CHANGE_USER_NAME:
+      return {...state,username:payload};
       break;
     default:
       return state;

@@ -11,7 +11,7 @@ import * as globalActions from '../../store/actions';
 const { Header, Content} = Layout;
 import styles from './style.scss';
 @connect(
-  state=>({user:state.user}),
+  state=>({user:state.global}),
   dispatch=>bindActionCreators(globalActions,dispatch)
 )
 class BasicLayout extends React.PureComponent{

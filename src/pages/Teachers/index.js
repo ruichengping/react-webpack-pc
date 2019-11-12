@@ -23,7 +23,7 @@ const sexMapper = (sex)=>{
 }
 
 @connect(
-  state => ({ user:state.user }),
+  state => ({ user:state.global }),
 )
 class Teachers extends React.PureComponent {
   state={
