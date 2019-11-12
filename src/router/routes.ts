@@ -1,6 +1,5 @@
 
 import { ComponentType,LazyExoticComponent,lazy } from 'react';
-import {} from 'react-router-dom';
 import BasicLayout from '@/layouts/BasicLayout';
 import NavTwoLayout from '@/layouts/NavTwoLayout';
 import NotFound from '@/pages/Exception/404';
@@ -9,7 +8,7 @@ const Teachers = lazy(() => import('@/pages/Teachers'));
 export interface RouteItem{
   path:string,
   redirect?:string,
-  layout?:any,
+  layout?:ComponentType,
   children?:RouteItem[],
   parent?:RouteItem,
   component?:ComponentType | LazyExoticComponent<ComponentType>
