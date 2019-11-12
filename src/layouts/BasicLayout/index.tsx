@@ -1,11 +1,26 @@
-import React,{ReactNode,ReactNodeArray,useState} from 'react';
-import {Menu,Popover,Avatar,Icon,Layout} from 'antd';
-import {useSelector} from 'react-redux';
-import {Link} from 'react-router-dom';
+import React,{ReactNode,ReactNodeArray,useState,useCallback,useEffect} from 'react';
+import {Menu,Popover,Avatar,Icon,Layout,Select} from 'antd';
+import intl from 'react-intl-universal';
+import {bindActionCreators} from 'redux';
+import {useSelector,useDispatch} from 'react-redux';
+import {get} from 'lodash';
 import {useHistory,useRouteMatch} from 'react-router';
+import {languages} from '@/constants';
+import * as actions from '@/store/actions';
 import './style.scss';
 const { Header, Content} = Layout;
-
+const {Option} = Select;
+function generateNavMenus(){
+  return [{
+    displayName:intl.get('TopNavMenu.NavOne'),
+    link:'/navone',
+    reg:/^\/navone/
+  },{
+    displayName:intl.get('TopNavMenu.NavTwo'),
+    link:'/navtwo',
+    reg:/^\/navtwo/
+  }];
+}
 interface BasicLayoutProps{
   className:string,
   children:ReactNode|ReactNodeArray
@@ -14,18 +29,43 @@ const BasicLayout = (props:BasicLayoutProps)=>{
   const {children,className} = props;
   const history = useHistory();
   const match = useRouteMatch();
-  const [menuSelectedKeys] = useState([match.path.match(/^\/[a-zA-Z]+/)[0]]);
-  const {userInfo} = useSelector((state:State)=>({userInfo:state.global.userInfo}),);
+  const [navMenus,setNavMenus] = useState([]);
+  const menuSelectedKeys = [get(navMenus.find((menu)=>menu.reg.test(match.path)),'link')].filter(Boolean);
+  const {userInfo,language} = useSelector<any,any>((state:any)=>({userInfo:state.global.userInfo,language:state.global.language}));
   const onMenuClick=({key}:any)=>{
     history.push(key);
   }
-  const {username} = userInfo;
-  const content=(
-    <ul className="m-user-operation-list">
-      <li className="operation-item" key="1"><Link to="/user/center">用户信息</Link></li>
-      <li className="operation-item" key="2"><a href="javascript:;">退出登录</a></li>
+  //监听语言变化
+  useEffect(()=>{
+    setNavMenus(generateNavMenus());
+  },[language])
+  const renderUserInfoPanel=useCallback(()=>{
+    const {changeSystemLanguage}= bindActionCreators<any,any>(actions,useDispatch());
+    const {username,email} = userInfo;
+    return <div className="user-info-panel">
+    <div className="basic-info">
+      <div>
+        <Avatar src={require('@/assets/avtar.jpeg')} size={38}/>
+      </div>
+      <div style={{paddingLeft:16}}>
+        <div>{username}</div>
+        <div>{email}</div>
+      </div>
+    </div>
+    <ul className="action-menu">
+      <li>
+        <Icon type="diff" />
+        <span> {intl.get('Action.ChangeLanguage')}</span> 
+        <Select value={language} placeholder="请选择" style={{width:100,float:'right'}} size="small" onChange={changeSystemLanguage}>
+          {
+            languages.map((lang:Language)=><Option key={lang.value} value={lang.value}>{lang.label}</Option>)
+          }
+        </Select>
+      </li>
+      <li><Icon type="logout" /><span> {intl.get('Action.Logout')}</span></li>
     </ul>
-  )
+   </div>
+  },[userInfo,language])
   return (
     <Layout className="g-container">
       <Header className="g-header">
@@ -38,14 +78,19 @@ const BasicLayout = (props:BasicLayoutProps)=>{
               selectedKeys={menuSelectedKeys}
               onClick={onMenuClick}
             >
-              <Menu.Item key="/navone"><Icon type="mail" /> 导航1</Menu.Item>
-              <Menu.Item key="/navtwo"><Icon type="appstore" /> 导航2</Menu.Item>
+              {
+                navMenus.map((navMenu)=>{
+                  const {displayName,link} = navMenu;
+                  return <Menu.Item key={link}>{displayName}</Menu.Item>
+                })
+              }
             </Menu>
           </div>
           <div className="m-right text-right">
-            <Popover placement="bottom" content={content}>
-              <Avatar icon="user" />
-              <span className="u-user-name ml-10">{username}</span>
+            <Icon className="icon-notice" type="bell" />
+            <Icon className="icon-help" type="question-circle" />
+            <Popover placement="bottomRight" content={renderUserInfoPanel()}>
+              <Avatar src={require('@/assets/avtar.jpeg')} />
             </Popover>
           </div>
       </Header>

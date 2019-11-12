@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 import { connect } from "react-redux";
 import {Table,Modal,message as Message} from "antd";
 import {API} from '@/api';
@@ -52,7 +52,8 @@ class Teachers extends React.PureComponent<TeachersProps,TeachersState> {
     this.loadMainData(true);
   }
   //删除
-  handleDelete=(row:TeacherItem)=>{
+  handleDelete=(row:TeacherItem,e:MouseEvent)=>{
+    e.preventDefault();
     const {teacherList} = this.state;
     Modal.confirm({
       title: '确认',
@@ -141,14 +142,21 @@ class Teachers extends React.PureComponent<TeachersProps,TeachersState> {
         key:'action',
         title: "操作",
         dataIndex: "action",
-        render: (value:any,row:TeacherItem,index:number) => <a href="javascript:;" onClick={()=>{this.handleDelete(row)}}>删除</a>
+        render: (value:any,row:TeacherItem,index:number) => <a href="#"  onClick={this.handleDelete.bind(this,row)}>删除</a>
       }
     ]
     return (
       <div className="page-pageTwo" >
           <div className="user">Hello,{username}</div>
           <Filter onSearch={this.handleSearch}/>
-          <Table style={{marginTop:20}} rowKey={(row:TeacherItem):string=>row.id+''} columns={columns} dataSource={teacherList} pagination={{current:pageNo,pageSize:(pageSize as number),onChange:this.handlePageChange}}/>  
+          <Table 
+            style={{marginTop:20}} 
+            rowKey={(row:TeacherItem):string=>row.id+''} 
+            columns={columns} 
+            dataSource={teacherList} 
+            pagination={{
+              current:pageNo,pageSize:(pageSize as number),
+              onChange:this.handlePageChange}}/>  
       </div>
     )
   }

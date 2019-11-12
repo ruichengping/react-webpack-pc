@@ -12,7 +12,12 @@ interface State{
   global:Global,
   author:Author
 }
-
+interface Language{
+  label: string,
+  value: string,
+  antdLocale:{[propName:string]:any},
+  locale:{[propName:string]:any},
+}
 type Options = {
   label:string,
   value:string|number

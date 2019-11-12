@@ -34,7 +34,7 @@ class Filter extends React.PureComponent<FilterProps,any>{
         <FormItem>
           {
             getFieldDecorator('sex')(
-              <Select allowClear={true} placeholder="请选择" style={{ width: 80 }}>
+              <Select allowClear={true} placeholder="请选择" style={{ width: 100 }}>
                 <Option value="1">男</Option>
                 <Option value="2">女</Option>
               </Select>
