@@ -21,7 +21,7 @@ export default ()=>{
       cookieLocaleKey: 'lang',
       localStorageLocaleKey:'lang'
     })||navigator.language;
-    changeSystemLanguage(currentLocale);
+    changeSystemLanguage(currentLocale.toLowerCase());
     fecthUserInfo();
   },[])
   return (
