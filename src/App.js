@@ -1,50 +1,40 @@
-import React,{Suspense} from 'react';
-import {Router} from 'react-router-dom';
-import {Switch, Route ,Redirect} from 'react-router';
-import {history,routes} from '@/router';
+import React,{Suspense,useEffect} from 'react';
+import {bindActionCreators} from 'redux';
+import {ConfigProvider} from 'antd';
+import {useSelector,useDispatch} from 'react-redux';
+import {Router,Switch} from 'react-router-dom';
+import intl from 'react-intl-universal';
+import {history,routes,renderRoutes} from '@/router';
+import * as actions from '@/store/actions';
+import {languages} from '@/constants';
 import Loading from '@/components/Loading';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
-
-
-function getRouterByRoutes(routes){
-  const renderedRoutesList = [];
-  const renderRoutes = (routes,parentPath)=>{
-    Array.isArray(routes)&&routes.forEach((route)=>{
-      const {path,redirect,children,layout,component} = route;
-      if(redirect){
-        renderedRoutesList.push(<Redirect key={`${parentPath}${path}`} exact from={path} to={`${parentPath}${redirect}`}/>)
-      }
-      if(component){
-        renderedRoutesList.push(
-          layout?<Route
-            key={`${parentPath}${path}`}
-            exact path={`${parentPath}${path}`}
-            render={(props)=>React.createElement(layout,props,React.createElement(component,props))} />:
-          <Route
-              key={`${parentPath}${path}`}
-              exact
-              path={`${parentPath}${path}`}
-              component={component}/>)
-      }
-      if(Array.isArray(children)&&children.length>0){
-        renderRoutes(children,path)
-      }
-    });
-  }
-  renderRoutes(routes,'')
-  return renderedRoutesList;
-}
-class App extends React.PureComponent{
-  render(){
-    return (
+export default ()=>{
+  const dispatch = useDispatch();
+  const {fecthUserInfo,changeSystemLanguage} = bindActionCreators(actions,dispatch);
+  const language = useSelector((state)=>state.global.language);
+  const {antdLocale} = languages.find((lang)=>lang.value===language); 
+  useEffect(()=>{
+    let currentLocale = intl.determineLocale({
+      urlLocaleKey: 'lang',
+      cookieLocaleKey: 'lang',
+      localStorageLocaleKey:'lang'
+    })||navigator.language;
+    changeSystemLanguage(currentLocale);
+    fecthUserInfo();
+  },[])
+  return (
+    <ConfigProvider locale={antdLocale}>
       <Router history={history}>
         <Suspense fallback={<Loading/>}>
-          <Switch>
-            {getRouterByRoutes(routes)}
-          </Switch>
+          <ErrorBoundary>
+            <Switch>
+              {renderRoutes(routes)}
+            </Switch>
+          </ErrorBoundary>
         </Suspense>
       </Router>
-    )
-  }
-}
-export default App;
+    </ConfigProvider>
+  )
+};

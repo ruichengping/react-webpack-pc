@@ -1,14 +1,19 @@
-import * as actionTypes from './actionTypes';
+import {CHANGE_USER_INFO,CHANGE_SYSTEM_LANGUAGE} from './actionTypes';
 const initialState={
-  username:''
+  userInfo:{
+    username:'--',
+    email:'--'   
+  },
+  language:'zh-cn'
 }
 
 export default (state=initialState,actions)=>{
   const {type,payload}=actions;
   switch(type){
-    case actionTypes.CHANGE_USER_NAME:
-      return Object.assign({},initialState,{username:payload});
-      break;
+    case CHANGE_USER_INFO:
+      return {...state,userInfo:payload};
+    case CHANGE_SYSTEM_LANGUAGE:
+      return {...state,language:payload}
     default:
       return state;
   }
